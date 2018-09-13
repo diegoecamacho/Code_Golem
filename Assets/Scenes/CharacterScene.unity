@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657874, g: 0.4964127, b: 0.5748172, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -157,6 +157,16 @@ Prefab:
       propertyPath: followTarget
       value: 
       objectReference: {fileID: 1066300339}
+    - target: {fileID: 114528031503739888, guid: 10416979f1db3804799489ed36e72c2c,
+        type: 2}
+      propertyPath: returnSensitivity
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 114528031503739888, guid: 10416979f1db3804799489ed36e72c2c,
+        type: 2}
+      propertyPath: YBoundaryDampening
+      value: 0.6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 10416979f1db3804799489ed36e72c2c, type: 2}
   m_IsPrefabAsset: 0
@@ -1768,23 +1778,3 @@ MonoBehaviour:
   m_Area: 1
   m_IgnoreFromBuild: 0
   m_AffectedAgents: ffffffff
---- !u!1 &2047878190 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1334345397339954, guid: 10416979f1db3804799489ed36e72c2c,
-    type: 2}
-  m_PrefabInternal: {fileID: 168129660}
---- !u!54 &2047878193
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 2047878190}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0

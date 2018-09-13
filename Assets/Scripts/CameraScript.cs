@@ -88,4 +88,10 @@ public class CameraScript : MonoBehaviour
 
         }
     }
+
+    public void ReturnCamera()
+    {
+        cameraDist = (MAX_CAM_DIST / 2);
+
+    }
 }
