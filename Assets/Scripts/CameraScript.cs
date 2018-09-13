@@ -28,6 +28,7 @@ public class CameraScript : MonoBehaviour
     public float Ydist = 2f; // Distance from the ground;
 
     [Header("Camera  Y Rotation Limits")]
+    
     [SerializeField] float minPithAngle = 0.0f; // Minimun Pitch Angle;
     [SerializeField] float maxPitchAngle = 90.0f; //Maximum Pitch Angle;
 
