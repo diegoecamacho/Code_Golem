@@ -1,19 +1,22 @@
 ﻿using UnityEngine;
+using System;
 
 namespace WeaponSystem
 {
-    internal abstract class WeaponBaseScript : MonoBehaviour
+    /// <summary>
+    /// Weapon Base Class
+    /// Inherit from this to begin creating weapon
+    /// </summary>
+    public class WeaponBaseScript : MonoBehaviour
     {
-        public bool m_InitBullet = false;
-
-        protected virtual void OnEnable()
+        /// <summary>Default fire method. Must be overriden.</summary>
+        public virtual void Fire()
         {
-            m_InitBullet = !m_InitBullet;
+            Debug.Log("Hello");
+            throw new Exception("You are calling the default fire method. Implenent it in your derived class");
         }
 
-        protected virtual void OnDisable()
-        {
-            m_InitBullet = !m_InitBullet;
-        }
     }
+
+    
 }

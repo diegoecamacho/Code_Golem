@@ -4,19 +4,22 @@ using WeaponSystem;
 
 public class PlayerController : MonoBehaviour
 {
+
     [SerializeField] private CharacterStats characterStats;
     [SerializeField] private GameObject pauseMenu;
 
     [SerializeField] private Transform spawnPoint; //Skill Spawn point
 
     //TODO: Implement weapon selection system
-    [SerializeField] private BulletInstance weaponPrefab;
 
     private bool UIenabled = false;
 
     public NavMeshAgent Agent;
 
-    public float movementSpeed = 1.0f;
+    public  WeaponObject currWeapon;
+
+    Transform _target;
+   
 
     /// <summary>
     /// Gets the current Characters stats card.
@@ -29,8 +32,8 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        Debug.Log(gameObject.GetInstanceID());
-        PoolManager.Instance.CreatePool(weaponPrefab, 3);
+        //PoolManager.Instance.CreatePool(weaponPrefab, 3);
+        //currWeapon.Init();
     }
 
     // Update is called once per frame
@@ -52,14 +55,15 @@ public class PlayerController : MonoBehaviour
                 {
                     if (hit.collider != null)
                     {
-                        Debug.Log("Hit");
+                        //_target.position = hit.point;
                         Agent.SetDestination(hit.point);
                     }
                 }
             }
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
-                PoolManager.Instance.SpawnBullet(weaponPrefab, spawnPoint);
+                GameObject bull = currWeapon.Instantiate(spawnPoint.position, spawnPoint.rotation);
+                bull.GetComponent<WeaponBaseScript>().Fire();
             }
         }
     }

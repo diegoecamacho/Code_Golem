@@ -6,13 +6,13 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 0}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f91c5e240950dc14181e10970cb37398, type: 3}
-  m_Name: WeaponBase
+  m_Name: Arrow
   m_EditorClassIdentifier: 
-  weaponName: Dam
-  weaponType: 1
-  Damage: 1
-  objectPrefab: {fileID: 1128584250154894, guid: 23ef29cfd42ab2f4ca88020f963364e4,
+  weaponName: Tar
+  weaponType: 3
+  Damage: 0
+  objectPrefab: {fileID: 1128584250154894, guid: d19abfdbf829a4d428d6c41c22286ea5,
     type: 2}

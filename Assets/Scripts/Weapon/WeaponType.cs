@@ -2,6 +2,7 @@
 {
     public enum WeaponType
     {
+        NULL,
         Self,
         SelectedEnemy,
         SelectedArea,

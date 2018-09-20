@@ -1,14 +1,23 @@
 ﻿using UnityEngine;
+using WeaponSystem;
 
-public class Boomerang : MonoBehaviour
+public class Boomerang : WeaponBaseScript
 {
-    // Use this for initialization
-    private void Start()
+    bool m_InitBullet = false;
+
+    public override void Fire()
     {
+        m_InitBullet = true; 
     }
 
-    // Update is called once per frame
-    private void Update()
+    private void FixedUpdate()
     {
+        if (m_InitBullet)
+        {
+            transform.Translate(Vector3.forward * 3);
+
+        }
     }
+
+
 }
