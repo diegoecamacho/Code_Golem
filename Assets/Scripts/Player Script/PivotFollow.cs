@@ -1,26 +1,24 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class PivotFollow : MonoBehaviour {
+public class PivotFollow : MonoBehaviour
+{
+    private const int WORLD_HIGH_POINT = 15;
+    private const int WORLD_LOW_POINT = -1;
+    private const int SLOW_POSITION = 1;
 
-    const int WORLD_HIGH_POINT = 15;
-    const int WORLD_LOW_POINT = -1;
-    const int SLOW_POSITION = 1;
+    private const string HORIZONTAL_AXIS = "Horizontal";
+    private const string VERTICAL_AXIS = "Vertical";
 
-    const string HORIZONTAL_AXIS = "Horizontal";
-    const string VERTICAL_AXIS = "Vertical";
-
-    [Header ("Camera Sentitivity")]
+    [Header("Camera Sentitivity")]
     /// <summary>
     /// How fast it takes to reach the Y Boundaries of the game world
     /// </summary>
-    [SerializeField] float YBoundaryDampening = 0.2f;
+    [SerializeField] private float YBoundaryDampening = 0.2f;
 
     public float movementSensitivity = 1.0f;
     public float returnSensitivity = 1.0f;
 
-    [Header ("Camera Focus")]
+    [Header("Camera Focus")]
     public Transform followTarget;
 
     public bool returningCamera = false;
@@ -29,11 +27,7 @@ public class PivotFollow : MonoBehaviour {
 
     public bool focusOnTarget = true;
 
-
-    CameraScript mainCam;
-
-
-
+    private CameraScript mainCam;
 
     // Update is called once per frame
 
@@ -42,15 +36,16 @@ public class PivotFollow : MonoBehaviour {
         mainCam = transform.GetChild(0).GetComponent<CameraScript>();
     }
 
-    void Update () {
-
-        if (Input.GetKey(KeyCode.Space)) {
+    private void Update()
+    {
+        if (Input.GetKey(KeyCode.Space))
+        {
             focusOnTarget = true;
             returningCamera = true;
             mainCam.ReturnCamera();
         }
 
-        if (transform.position != followTarget.position && focusOnTarget == true )
+        if (transform.position != followTarget.position && focusOnTarget == true)
         {
             transform.position = Vector3.Lerp(transform.position, followTarget.position, returnSensitivity * Time.deltaTime);
             if (Vector3.Distance(transform.position, followTarget.position) < SLOW_POSITION)
@@ -59,8 +54,7 @@ public class PivotFollow : MonoBehaviour {
             }
         }
 
-       // Debug.Log(Vector3.Distance(transform.position, followTarget.position));
-       
+        // Debug.Log(Vector3.Distance(transform.position, followTarget.position));
 
         if (!returningCamera)
         {
@@ -83,13 +77,5 @@ public class PivotFollow : MonoBehaviour {
 
             transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, WORLD_LOW_POINT, WORLD_HIGH_POINT), transform.position.z);
         }
-        
-        
-
-       
     }
-        
-
-
-	}
-
+}

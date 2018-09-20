@@ -8,7 +8,7 @@ public class DungeonManager : MonoBehaviour
     public float m_Spacing = 4.0f;
     public GameObject[] m_Tiles = new GameObject[16];
 
-    void Awake()
+    private void Awake()
     {
         Random.InitState(23431);
         var map = new int[m_Width * m_Height];

@@ -1,18 +1,18 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.AI;
+using WeaponSystem;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] CharacterStats characterStats;
-    [SerializeField] GameObject pauseMenu;
+    [SerializeField] private CharacterStats characterStats;
+    [SerializeField] private GameObject pauseMenu;
 
-    [SerializeField] Transform spawnPoint; //Skill Spawn point
+    [SerializeField] private Transform spawnPoint; //Skill Spawn point
 
+    //TODO: Implement weapon selection system
+    [SerializeField] private BulletInstance weaponPrefab;
 
-    bool UIenabled = false;
-
+    private bool UIenabled = false;
 
     public NavMeshAgent Agent;
 
@@ -27,8 +27,14 @@ public class PlayerController : MonoBehaviour
         return characterStats;
     }
 
+    private void Start()
+    {
+        Debug.Log(gameObject.GetInstanceID());
+        PoolManager.Instance.CreatePool(weaponPrefab, 3);
+    }
+
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
@@ -48,16 +54,12 @@ public class PlayerController : MonoBehaviour
                     {
                         Debug.Log("Hit");
                         Agent.SetDestination(hit.point);
-
-
                     }
                 }
             }
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
-                //GameObject atk = Instantiate()
-
-
+                PoolManager.Instance.SpawnBullet(weaponPrefab, spawnPoint);
             }
         }
     }

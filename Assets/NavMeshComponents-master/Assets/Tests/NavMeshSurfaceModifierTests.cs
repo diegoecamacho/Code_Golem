@@ -1,15 +1,14 @@
 #if UNITY_EDITOR || UNITY_STANDALONE
+
+using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.TestTools;
-using NUnit.Framework;
-using System.Collections;
 
 [TestFixture]
 public class NavMeshSurfaceModifierTests
 {
-    NavMeshSurface surface;
-    NavMeshModifier modifier;
+    private NavMeshSurface surface;
+    private NavMeshModifier modifier;
 
     [SetUp]
     public void CreatePlaneWithModifier()
@@ -109,4 +108,5 @@ public class NavMeshSurfaceModifierTests
         GameObject.DestroyImmediate(siblingPlane);
     }
 }
+
 #endif

@@ -5,15 +5,15 @@ using UnityEngine.AI;
 [RequireComponent(typeof(NavMeshAgent))]
 public class ClickToMove : MonoBehaviour
 {
-    NavMeshAgent m_Agent;
-    RaycastHit m_HitInfo = new RaycastHit();
+    private NavMeshAgent m_Agent;
+    private RaycastHit m_HitInfo = new RaycastHit();
 
-    void Start()
+    private void Start()
     {
         m_Agent = GetComponent<NavMeshAgent>();
     }
 
-    void Update()
+    private void Update()
     {
         if (Input.GetMouseButtonDown(0) && !Input.GetKey(KeyCode.LeftShift))
         {

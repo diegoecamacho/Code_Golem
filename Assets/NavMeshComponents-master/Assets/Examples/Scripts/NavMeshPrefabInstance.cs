@@ -1,5 +1,5 @@
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.AI;
 
 [ExecuteInEditMode]
@@ -7,7 +7,8 @@ using UnityEngine.AI;
 public class NavMeshPrefabInstance : MonoBehaviour
 {
     [SerializeField]
-    NavMeshData m_NavMesh;
+    private NavMeshData m_NavMesh;
+
     public NavMeshData navMeshData
     {
         get { return m_NavMesh; }
@@ -15,22 +16,24 @@ public class NavMeshPrefabInstance : MonoBehaviour
     }
 
     [SerializeField]
-    bool m_FollowTransform;
+    private bool m_FollowTransform;
+
     public bool followTransform
     {
         get { return m_FollowTransform; }
         set { SetFollowTransform(value); }
     }
 
-    NavMeshDataInstance m_Instance;
+    private NavMeshDataInstance m_Instance;
 
     // Position Tracking
-    static readonly List<NavMeshPrefabInstance> s_TrackedInstances = new List<NavMeshPrefabInstance>();
-    public static List<NavMeshPrefabInstance> trackedInstances {get {return s_TrackedInstances; }}
-    Vector3 m_Position;
-    Quaternion m_Rotation;
+    private static readonly List<NavMeshPrefabInstance> s_TrackedInstances = new List<NavMeshPrefabInstance>();
 
-    void OnEnable()
+    public static List<NavMeshPrefabInstance> trackedInstances { get { return s_TrackedInstances; } }
+    private Vector3 m_Position;
+    private Quaternion m_Rotation;
+
+    private void OnEnable()
     {
         AddInstance();
 
@@ -38,7 +41,7 @@ public class NavMeshPrefabInstance : MonoBehaviour
             AddTracking();
     }
 
-    void OnDisable()
+    private void OnDisable()
     {
         m_Instance.Remove();
         RemoveTracking();
@@ -50,7 +53,7 @@ public class NavMeshPrefabInstance : MonoBehaviour
         AddInstance();
     }
 
-    void AddInstance()
+    private void AddInstance()
     {
 #if UNITY_EDITOR
         if (m_Instance.valid)
@@ -66,7 +69,7 @@ public class NavMeshPrefabInstance : MonoBehaviour
         m_Position = transform.position;
     }
 
-    void AddTracking()
+    private void AddTracking()
     {
 #if UNITY_EDITOR
         // At runtime we don't want linear lookup
@@ -81,14 +84,14 @@ public class NavMeshPrefabInstance : MonoBehaviour
         s_TrackedInstances.Add(this);
     }
 
-    void RemoveTracking()
+    private void RemoveTracking()
     {
         s_TrackedInstances.Remove(this);
         if (s_TrackedInstances.Count == 0)
             NavMesh.onPreUpdate -= UpdateTrackedInstances;
     }
 
-    void SetFollowTransform(bool value)
+    private void SetFollowTransform(bool value)
     {
         if (m_FollowTransform == value)
             return;
@@ -99,12 +102,12 @@ public class NavMeshPrefabInstance : MonoBehaviour
             RemoveTracking();
     }
 
-    bool HasMoved()
+    private bool HasMoved()
     {
         return m_Position != transform.position || m_Rotation != transform.rotation;
     }
 
-    static void UpdateTrackedInstances()
+    private static void UpdateTrackedInstances()
     {
         foreach (var instance in s_TrackedInstances)
         {
@@ -114,7 +117,8 @@ public class NavMeshPrefabInstance : MonoBehaviour
     }
 
 #if UNITY_EDITOR
-    void OnValidate()
+
+    private void OnValidate()
     {
         // Only when the instance is valid (OnEnable is called) - we react to changes caused by serialization
         if (!m_Instance.valid)
@@ -130,5 +134,6 @@ public class NavMeshPrefabInstance : MonoBehaviour
             AddTracking();
         }
     }
+
 #endif
 }

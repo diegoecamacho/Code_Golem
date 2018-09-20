@@ -1,14 +1,15 @@
 #if UNITY_EDITOR || UNITY_STANDALONE
+
+using NUnit.Framework;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.TestTools;
-using NUnit.Framework;
-using System.Collections;
 
 public class NavMeshSurfaceAgentTests
 {
-    NavMeshSurface m_Surface;
-    NavMeshAgent m_Agent;
+    private NavMeshSurface m_Surface;
+    private NavMeshAgent m_Agent;
 
     [SetUp]
     public void Setup()
@@ -53,21 +54,20 @@ public class NavMeshSurfaceAgentTests
         Assert.IsTrue(m_Agent.isOnNavMesh);
     }
 
+    /*
+        [Test]
+        public void AgentIsOnNavMeshWhenMatchingAgentTypeID()
+        {
+            m_Surface.agentTypeID = 1234;
+            m_Surface.BuildNavMesh();
 
-/*
-    [Test]
-    public void AgentIsOnNavMeshWhenMatchingAgentTypeID()
-    {
-        m_Surface.agentTypeID = 1234;
-        m_Surface.BuildNavMesh();
+            m_Agent = new GameObject("Agent").AddComponent<NavMeshAgent>();
+            Assert.IsFalse(m_Agent.isOnNavMesh);
 
-        m_Agent = new GameObject("Agent").AddComponent<NavMeshAgent>();
-        Assert.IsFalse(m_Agent.isOnNavMesh);
-
-        m_Agent.agentTypeID = 1234;
-        Assert.IsTrue(m_Agent.isOnNavMesh);
-    }
-*/
+            m_Agent.agentTypeID = 1234;
+            Assert.IsTrue(m_Agent.isOnNavMesh);
+        }
+    */
 
     [UnityTest]
     public IEnumerator AgentAlignsToSurfaceNextFrame()
@@ -98,4 +98,5 @@ public class NavMeshSurfaceAgentTests
         Assert.IsTrue(residual.magnitude < 0.01f);
     }
 }
+
 #endif

@@ -1,22 +1,19 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 namespace Menus
 {
     public class StatsMenu : MonoBehaviour
     {
-
         public static PlayerController focusCharacter;
 
         [Header("UI Elements")]
         public Text m_LevelStatsText;
+
         public Text m_StrengthText;
         public Text m_ConstitutionText;
         public Text m_IntelligenceText;
         public Text m_DefenseText;
-
 
         private void Start()
         {
@@ -25,8 +22,7 @@ namespace Menus
             UpdateUI();
         }
 
-
-        void UpdateUI()
+        private void UpdateUI()
         {
             m_LevelStatsText.text = focusCharacter.GetStatsCard().GetPlayerLevel().ToString();
             m_StrengthText.text = focusCharacter.GetStatsCard().Strength.ToString();

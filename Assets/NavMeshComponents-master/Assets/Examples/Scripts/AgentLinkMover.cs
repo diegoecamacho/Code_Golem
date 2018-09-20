@@ -1,6 +1,6 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
-using System.Collections;
 
 public enum OffMeshLinkMoveMethod
 {
@@ -16,7 +16,7 @@ public class AgentLinkMover : MonoBehaviour
     public OffMeshLinkMoveMethod m_Method = OffMeshLinkMoveMethod.Parabola;
     public AnimationCurve m_Curve = new AnimationCurve();
 
-    IEnumerator Start()
+    private IEnumerator Start()
     {
         NavMeshAgent agent = GetComponent<NavMeshAgent>();
         agent.autoTraverseOffMeshLink = false;
@@ -36,7 +36,7 @@ public class AgentLinkMover : MonoBehaviour
         }
     }
 
-    IEnumerator NormalSpeed(NavMeshAgent agent)
+    private IEnumerator NormalSpeed(NavMeshAgent agent)
     {
         OffMeshLinkData data = agent.currentOffMeshLinkData;
         Vector3 endPos = data.endPos + Vector3.up * agent.baseOffset;
@@ -47,7 +47,7 @@ public class AgentLinkMover : MonoBehaviour
         }
     }
 
-    IEnumerator Parabola(NavMeshAgent agent, float height, float duration)
+    private IEnumerator Parabola(NavMeshAgent agent, float height, float duration)
     {
         OffMeshLinkData data = agent.currentOffMeshLinkData;
         Vector3 startPos = agent.transform.position;
@@ -62,7 +62,7 @@ public class AgentLinkMover : MonoBehaviour
         }
     }
 
-    IEnumerator Curve(NavMeshAgent agent, float duration)
+    private IEnumerator Curve(NavMeshAgent agent, float duration)
     {
         OffMeshLinkData data = agent.currentOffMeshLinkData;
         Vector3 startPos = agent.transform.position;

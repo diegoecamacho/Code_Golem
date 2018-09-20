@@ -6,10 +6,10 @@ using NavMeshBuilder = UnityEngine.AI.NavMeshBuilder;
 
 [CanEditMultipleObjects]
 [CustomEditor(typeof(NavMeshPrefabInstance))]
-class NavMeshPrefabInstanceEditor : Editor
+internal class NavMeshPrefabInstanceEditor : Editor
 {
-    SerializedProperty m_FollowTransformProp;
-    SerializedProperty m_NavMeshDataProp;
+    private SerializedProperty m_FollowTransformProp;
+    private SerializedProperty m_NavMeshDataProp;
 
     public void OnEnable()
     {
@@ -36,7 +36,7 @@ class NavMeshPrefabInstanceEditor : Editor
         serializedObject.ApplyModifiedProperties();
     }
 
-    void OnInspectorGUIPrefab(GameObject go)
+    private void OnInspectorGUIPrefab(GameObject go)
     {
         var prefab = PrefabUtility.GetPrefabObject(go);
         var path = AssetDatabase.GetAssetPath(prefab);
@@ -65,7 +65,7 @@ class NavMeshPrefabInstanceEditor : Editor
         GUILayout.EndHorizontal();
     }
 
-    NavMeshData Build(NavMeshPrefabInstance instance)
+    private NavMeshData Build(NavMeshPrefabInstance instance)
     {
         var root = instance.transform;
         var sources = new List<NavMeshBuildSource>();
@@ -79,7 +79,7 @@ class NavMeshPrefabInstanceEditor : Editor
         return navmesh;
     }
 
-    void OnClear()
+    private void OnClear()
     {
         foreach (var tgt in targets)
         {
@@ -99,7 +99,7 @@ class NavMeshPrefabInstanceEditor : Editor
         }
     }
 
-    void OnBake()
+    private void OnBake()
     {
         foreach (var tgt in targets)
         {
@@ -125,7 +125,7 @@ class NavMeshPrefabInstanceEditor : Editor
         }
     }
 
-    void DestroyNavMeshData(string path)
+    private void DestroyNavMeshData(string path)
     {
         // Destroy and remove all existing NavMeshData sub-assets
         var assets = AssetDatabase.LoadAllAssetsAtPath(path);
@@ -138,7 +138,7 @@ class NavMeshPrefabInstanceEditor : Editor
     }
 
     [DrawGizmo(GizmoType.Selected | GizmoType.Active | GizmoType.Pickable)]
-    static void RenderGizmo(NavMeshPrefabInstance instance, GizmoType gizmoType)
+    private static void RenderGizmo(NavMeshPrefabInstance instance, GizmoType gizmoType)
     {
         if (!EditorApplication.isPlaying)
             instance.UpdateInstance();

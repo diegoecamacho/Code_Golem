@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Menus
 {
@@ -23,15 +21,19 @@ namespace Menus
                 case StatsType.STRENGTH:
                     StatsMenu.focusCharacter.GetStatsCard()["Strength"]++;
                     break;
+
                 case StatsType.CONSTITUTION:
                     StatsMenu.focusCharacter.GetStatsCard()["Constitution"]++;
                     break;
+
                 case StatsType.INTELLIGENCE:
                     StatsMenu.focusCharacter.GetStatsCard()["Intelligence"]++;
                     break;
+
                 case StatsType.DEFENSE:
                     StatsMenu.focusCharacter.GetStatsCard()["Defense"]++;
                     break;
+
                 default:
                     break;
             }

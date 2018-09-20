@@ -1,6 +1,5 @@
-using UnityEngine;
-
 using System.Collections.Generic;
+using UnityEngine;
 
 // Fill 5x5 tiles around the local position procedurally by instantiating prefabs at random positions/orientations
 [DefaultExecutionOrder(-200)]
@@ -16,11 +15,11 @@ public class RandomInstancing : MonoBehaviour
     public int m_BaseHash = 347652783;
     public float m_Size = 100.0f;
 
-    List<Transform> m_Instances = new List<Transform>();
-    int m_Used;
-    int m_LocX, m_LocZ;
+    private List<Transform> m_Instances = new List<Transform>();
+    private int m_Used;
+    private int m_LocX, m_LocZ;
 
-    void Awake()
+    private void Awake()
     {
         for (int i = 0; i < m_PoolSize; ++i)
         {
@@ -30,14 +29,14 @@ public class RandomInstancing : MonoBehaviour
         }
     }
 
-    void OnEnable()
+    private void OnEnable()
     {
         m_LocX = ~0;
         m_LocZ = ~0;
         UpdateInstances();
     }
 
-    void OnDestroy()
+    private void OnDestroy()
     {
         for (int i = 0; i < m_Instances.Count; ++i)
         {
@@ -47,12 +46,12 @@ public class RandomInstancing : MonoBehaviour
         m_Instances.Clear();
     }
 
-    void Update()
+    private void Update()
     {
         UpdateInstances();
     }
 
-    void UpdateInstances()
+    private void UpdateInstances()
     {
         var x = (int)Mathf.Floor(transform.position.x / m_Size);
         var z = (int)Mathf.Floor(transform.position.z / m_Size);
@@ -79,7 +78,7 @@ public class RandomInstancing : MonoBehaviour
             m_Instances[i].gameObject.SetActive(false);
     }
 
-    int UpdateTileInstances(int i, int j)
+    private int UpdateTileInstances(int i, int j)
     {
         var seed = Hash2(i, j) ^ m_BaseHash;
         var count = System.Math.Min(m_InstancesPerTile, m_PoolSize - m_Used);
@@ -110,12 +109,12 @@ public class RandomInstancing : MonoBehaviour
         return count;
     }
 
-    static int Hash2(int i, int j)
+    private static int Hash2(int i, int j)
     {
         return (i * 73856093) ^ (j * 19349663);
     }
 
-    static float Random(ref int seed)
+    private static float Random(ref int seed)
     {
         seed = (seed ^ 123459876);
         var k = seed / 127773;

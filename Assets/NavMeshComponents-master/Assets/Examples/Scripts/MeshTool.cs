@@ -1,5 +1,5 @@
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
 
 // Manipulation tool for displacing the vertices in a list of meshes
 public class MeshTool : MonoBehaviour
@@ -15,15 +15,15 @@ public class MeshTool : MonoBehaviour
     public float m_Power = 2.0f;
     public ExtrudeMethod m_Method = ExtrudeMethod.Vertical;
 
-    RaycastHit m_HitInfo = new RaycastHit();
+    private RaycastHit m_HitInfo = new RaycastHit();
 
-    void Start()
+    private void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
 
-    void Update()
+    private void Update()
     {
         var ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
         if (Physics.Raycast(ray.origin, ray.direction, out m_HitInfo))
@@ -38,7 +38,7 @@ public class MeshTool : MonoBehaviour
         }
     }
 
-    void ModifyMesh(Vector3 displacement, Vector3 center)
+    private void ModifyMesh(Vector3 displacement, Vector3 center)
     {
         foreach (var filter in m_Filters)
         {
@@ -65,7 +65,7 @@ public class MeshTool : MonoBehaviour
         }
     }
 
-    static float Gaussian(Vector3 pos, Vector3 mean, float dev)
+    private static float Gaussian(Vector3 pos, Vector3 mean, float dev)
     {
         float x = pos.x - mean.x;
         float y = pos.y - mean.y;

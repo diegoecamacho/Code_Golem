@@ -6,14 +6,14 @@ using UnityEngine.AI;
 public class RandomWalk : MonoBehaviour
 {
     public float m_Range = 25.0f;
-    NavMeshAgent m_Agent;
+    private NavMeshAgent m_Agent;
 
-    void Start()
+    private void Start()
     {
         m_Agent = GetComponent<NavMeshAgent>();
     }
 
-    void Update()
+    private void Update()
     {
         if (m_Agent.pathPending || m_Agent.remainingDistance > 0.1f)
             return;

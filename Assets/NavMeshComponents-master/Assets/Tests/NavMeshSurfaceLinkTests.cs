@@ -1,9 +1,10 @@
 #if UNITY_EDITOR || UNITY_STANDALONE
+
+using NUnit.Framework;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.TestTools;
-using NUnit.Framework;
-using System.Collections;
 
 [TestFixture]
 public class NavMeshSurfaceLinkTests
@@ -142,4 +143,5 @@ public class NavMeshSurfaceLinkTests
         return false;
     }
 }
+
 #endif

@@ -1,12 +1,12 @@
-﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 [CreateAssetMenu(fileName = "CharacterStats", menuName = "Character/Stats", order = 1)]
-public class CharacterStats : ScriptableObject {
+public class CharacterStats : ScriptableObject
+{
     private int level = 1;
 
-    IDictionary<string, int> playerStars = new Dictionary<string, int>(){
+    private IDictionary<string, int> playerStars = new Dictionary<string, int>(){
         {"Strength" , 10 },
         {"Constitution" , 10 },
         {"Intelligence" , 10 },
@@ -83,8 +83,10 @@ public class CharacterStats : ScriptableObject {
         }
     }
 
-    public int GetPlayerLevel() { return level; }
-
+    public int GetPlayerLevel()
+    {
+        return level;
+    }
 
     public static CharacterStats operator +(CharacterStats lhs, CharacterStats rhs)
     {
@@ -100,13 +102,4 @@ public class CharacterStats : ScriptableObject {
 
         return stats;
     }
-
-   
-        
-
-
-
-
-
-
 }

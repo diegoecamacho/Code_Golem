@@ -5,7 +5,7 @@ public class DestroyOnTrigger : MonoBehaviour
 {
     public string m_Tag = "Player";
 
-    void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == m_Tag)
             Destroy(gameObject);

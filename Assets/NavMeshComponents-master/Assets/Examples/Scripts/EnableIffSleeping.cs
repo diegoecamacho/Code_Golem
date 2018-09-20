@@ -5,14 +5,14 @@ using UnityEngine;
 public class EnableIffSleeping : MonoBehaviour
 {
     public Behaviour m_Behaviour;
-    Rigidbody m_Rigidbody;
+    private Rigidbody m_Rigidbody;
 
-    void Start()
+    private void Start()
     {
         m_Rigidbody = GetComponent<Rigidbody>();
     }
 
-    void Update()
+    private void Update()
     {
         if (m_Rigidbody == null || m_Behaviour == null)
             return;

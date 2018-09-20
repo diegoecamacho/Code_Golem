@@ -1,15 +1,16 @@
 #if UNITY_EDITOR || UNITY_STANDALONE
+
+using NUnit.Framework;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.TestTools;
-using NUnit.Framework;
-using System.Collections;
 
 [TestFixture]
 public class NavMeshSurfaceTests
 {
-    GameObject plane;
-    NavMeshSurface surface;
+    private GameObject plane;
+    private NavMeshSurface surface;
 
     [SetUp]
     public void CreatePlaneWithSurface()
@@ -199,4 +200,5 @@ public class NavMeshSurfaceTests
         return NavMesh.SamplePosition(Vector3.zero, out hit, 0.1f, filter);
     }
 }
+
 #endif
