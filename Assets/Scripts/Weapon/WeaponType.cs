@@ -1,4 +1,4 @@
-﻿namespace WeaponSystem
+﻿namespace CodeGolem_WeaponSystem
 {
     public enum WeaponType
     {
