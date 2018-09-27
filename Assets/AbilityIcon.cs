@@ -7,75 +7,93 @@ namespace CodeGolem_UI
 
     public class AbilityIcon : MonoBehaviour
     {
-        public const string abilityButtom = "SkillSlot1";
+        [Header("Icon Instance Fields")]
+
+        public Image buttomImage;
         public Image darkMask;
         public Image activeMask;
         public Text coolDownText;
 
-        public float coolDownDuration;
-        private float activeTime = 0;
-        private float coolDownTimeLeft;
+        
 
-        public Image buttomImage;
+        [HideInInspector]
+        public float coolDownDuration;
+        private float timeElapsed = 0;
+
 
         [Header("Instance Specific")]
-        bool m_inCoolDown = false;
+        bool m_onCoolDown = false;
 
         private void Start()
         {
-           // PlayerController.skillsUIUpdate += Initialize;
             buttomImage = GetComponent<Image>();
         }
 
+        /// <summary>
+        /// Is skill currently on Cooldown.
+        /// </summary>
+        /// <returns>bool skillActive</returns>
         public bool IsActive()
         {
-            return m_inCoolDown;
+            return m_onCoolDown;
         }
 
-
-        public void ActivateSkill()
+        /// <summary>
+        /// Enables Skill Icon Active Effect
+        /// </summary>
+        public void EnableIconEffect()
         {
             activeMask.enabled = true;
-            m_inCoolDown = true;
         }
-
-        public void ActivateCooldown ()
+    
+        /// <summary>
+        /// Starts the Cooldown timer animation.
+        /// </summary>
+        public void ActivateIconCoolDown()
         {
+            m_onCoolDown = true;
             activeMask.enabled = false;
-            activeTime = coolDownDuration + coolDownDuration + Time.time;
-            coolDownTimeLeft = coolDownDuration;
             darkMask.enabled = true;
             coolDownText.enabled = true;
         }
+        /// <summary>
+        /// Resets the Cooldown Icon.
+        /// </summary>
+         private void ResetSkillIcon()
+         {
+             darkMask.enabled = false;
+             coolDownText.enabled = false;
+             m_onCoolDown = false;
+             timeElapsed = 0;
+         }
+     
+         /// <summary>
+         /// Plays the Cooldown Animation
+         /// </summary>
+         private void PlayCoolDownAnim()
+         {
+         
+             float coolDownTimeLeft = coolDownDuration - timeElapsed;
+             float roundCd = Mathf.Floor(coolDownTimeLeft);
+             coolDownText.text = roundCd.ToString();
+             darkMask.fillAmount = (coolDownTimeLeft / coolDownDuration);
+         }
 
-        private void ResetSkill()
-        {
-            darkMask.enabled = false;
-            coolDownText.enabled = false;
-            m_inCoolDown = false;
-        }
-
-        private void CoolDown()
-        {
-            
-            coolDownTimeLeft -= Time.deltaTime;
-            float roundCd = Mathf.Floor(coolDownTimeLeft);
-            coolDownText.text = roundCd.ToString();
-            darkMask.fillAmount = (coolDownTimeLeft / coolDownDuration);
-        }
-
-        // Update is called once per frame
-        private void Update()
-        {
-            bool cooldownComplete = (Time.time > activeTime);
-            if (cooldownComplete)
+            // Update is called once per frame
+            private void Update()
             {
-                ResetSkill();
-            }
-            else
-            {
-                CoolDown();
+                if (m_onCoolDown)
+                {
+                    if (timeElapsed >= coolDownDuration)
+                    {
+                        ResetSkillIcon();
+                    }
+                    else
+                    {
+                        timeElapsed += Time.deltaTime;
+                        PlayCoolDownAnim();
+                    }
+                }
             }
         }
-    }
 }

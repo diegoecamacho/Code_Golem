@@ -11,8 +11,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2530f5b8689f4e647be688910b7dd2b3, type: 3}
   m_Name: Launcher
   m_EditorClassIdentifier: 
-  imageSprite: {fileID: 0}
-  coolDown: 2
+  imageSprite: {fileID: 21300000, guid: 34acf8bde9c278142b355ae16c8dad5c, type: 3}
+  coolDown: 5
   mpCost: 0
   Damage: 0
-  projectileSpeed: 5
+  m_projectileSpeed: 0

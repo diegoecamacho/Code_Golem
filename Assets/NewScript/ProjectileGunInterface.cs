@@ -9,7 +9,7 @@ namespace CodeGolem.Combat
     public class ProjectileGunInterface : SkillComponent
     {
         [Header("Projectile Components")]
-        [SerializeField] float projectileSpeed;
+        [SerializeField] float m_projectileSpeed;
 
         ISkillInterface projectileGunBehaviour;
 
@@ -31,17 +31,27 @@ namespace CodeGolem.Combat
         public override void RegisterSkill(AbilityIcon icon)
         {
             abilityIcon = icon;
-            icon.buttomImage = imageSprite;
-            icon.coolDownDuration = coolDown;
+            abilityIcon.buttomImage.sprite = imageSprite;
+            abilityIcon.coolDownDuration = coolDown;
         }
 
         public override void Use()
         {
-            if (!abilityIcon.IsActive())
+            if (!IsActive())
             {
-                abilityIcon.ActivateSkill();
+                //abilityIcon.ActivateSkill();
                 projectileGunBehaviour.Use();
+                abilityIcon.EnableIconEffect();
             }
         }
+
+
+
+        bool IsActive()
+        {
+            Debug.Log(abilityIcon.IsActive() || projectileGunBehaviour.IsActive());
+            return (abilityIcon.IsActive() || projectileGunBehaviour.IsActive());
+        }
+
     }
 }

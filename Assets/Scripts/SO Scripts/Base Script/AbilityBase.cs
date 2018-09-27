@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace CodeGolem_WeaponSystem
+namespace CodeGolem.Combat
 {
     public abstract class AbilityBase : ScriptableObject
     {
@@ -9,9 +9,6 @@ namespace CodeGolem_WeaponSystem
         public float m_baseCoolDown = 1f;
         public bool allowMovement = false;
 
-        PlayerController owner;
-
-
         public abstract void Initialize(Transform obj);
 
         public abstract void ActivateSkill();
@@ -19,6 +16,5 @@ namespace CodeGolem_WeaponSystem
         public abstract bool GetActive();
 
         public abstract bool InCoolDown();
-  
     }
 }
