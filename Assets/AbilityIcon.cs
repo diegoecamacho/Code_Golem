@@ -9,67 +9,68 @@ namespace CodeGolem_UI
     {
         public const string abilityButtom = "SkillSlot1";
         public Image darkMask;
+        public Image activeMask;
         public Text coolDownText;
 
-        private AbilityBase ability;
-        private GameObject weaponHolder;
-        private Image buttomImage;
-        private float coolDownDuration;
-        private float nextReadyTime;
+        public float coolDownDuration;
+        private float activeTime = 0;
         private float coolDownTimeLeft;
+
+        public Image buttomImage;
+
+        [Header("Instance Specific")]
+        bool m_inCoolDown = false;
 
         private void Start()
         {
-            PlayerController.skillsUIUpdate += Initialize;
-        }
-
-        public void Initialize(AbilityBase selectedAbility, GameObject weaponHolder)
-        {
-            ability = selectedAbility;
+           // PlayerController.skillsUIUpdate += Initialize;
             buttomImage = GetComponent<Image>();
-            buttomImage.sprite = ability.m_Sprite;
-            coolDownDuration = ability.m_baseCoolDown;
-            ability.Initialize(weaponHolder);
-            AbilityEnable();
         }
 
-        private void AbilityEnable()
+        public bool IsActive()
+        {
+            return m_inCoolDown;
+        }
+
+
+        public void ActivateSkill()
+        {
+            activeMask.enabled = true;
+            m_inCoolDown = true;
+        }
+
+        public void ActivateCooldown ()
+        {
+            activeMask.enabled = false;
+            activeTime = coolDownDuration + coolDownDuration + Time.time;
+            coolDownTimeLeft = coolDownDuration;
+            darkMask.enabled = true;
+            coolDownText.enabled = true;
+        }
+
+        private void ResetSkill()
         {
             darkMask.enabled = false;
             coolDownText.enabled = false;
+            m_inCoolDown = false;
         }
 
         private void CoolDown()
         {
+            
             coolDownTimeLeft -= Time.deltaTime;
             float roundCd = Mathf.Floor(coolDownTimeLeft);
             coolDownText.text = roundCd.ToString();
             darkMask.fillAmount = (coolDownTimeLeft / coolDownDuration);
         }
 
-        private void TriggerCooldown()
-        {
-            nextReadyTime = coolDownDuration + Time.time;
-            coolDownTimeLeft = coolDownDuration;
-            darkMask.enabled = true;
-            coolDownText.enabled = true;
-
-            //#Play Sound?
-
-            ability.ActivateSkill();
-        }
-
         // Update is called once per frame
         private void Update()
         {
-            bool cooldownComplete = (Time.time > nextReadyTime);
+            bool cooldownComplete = (Time.time > activeTime);
             if (cooldownComplete)
             {
-                AbilityEnable();
-                if (Input.GetButtonDown(abilityButtom))
-                {
-                    TriggerCooldown();
-                }
+                ResetSkill();
             }
             else
             {

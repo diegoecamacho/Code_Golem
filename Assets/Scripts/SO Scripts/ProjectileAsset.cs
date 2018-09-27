@@ -8,21 +8,41 @@ namespace CodeGolem_WeaponSystem
         public float m_bulletSpeed = 1f;
         public float m_Damage = 0;
 
+        public float m_activeDuration = 3;
+
         [Header("Instance:")]
+        public GameObject projectileTriggerPrefab;
         public GameObject projectilePrefab;
 
-        ProjectileWeapon launcher;
+        GameObject projectileTriggerInstance;
+        ProjectileLauncher launcher;
 
-        public override void Initialize(GameObject obj)
+        public override void Initialize(Transform spawnTransform)
         {
-            launcher = obj.GetComponent<ProjectileWeapon>();
+  
+            projectileTriggerInstance = Instantiate(projectileTriggerPrefab, spawnTransform);
+            launcher = projectileTriggerInstance.GetComponent<ProjectileLauncher>();
             launcher.projectileSpeed = m_bulletSpeed;
             launcher.projectile = projectilePrefab;
+            launcher.bulletDamage = m_Damage;
+            launcher.activeTime = m_activeDuration;
+            launcher.coolDownTime = m_baseCoolDown;
         }
 
         public override void ActivateSkill()
         {
-            launcher.LaunchSkill();
+
+                launcher.LaunchSkill();
+        }
+
+        public override bool GetActive()
+        {
+            return launcher.SkillActive;
+        }
+
+        public override bool InCoolDown()
+        {
+            return launcher.InCoolDown;
         }
     }
 }

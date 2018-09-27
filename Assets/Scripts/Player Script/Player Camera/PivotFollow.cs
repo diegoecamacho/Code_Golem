@@ -2,14 +2,15 @@
 
 public class PivotFollow : MonoBehaviour
 {
-    private const int WORLD_HIGH_POINT = 15;
-    private const int WORLD_LOW_POINT = -1;
+    //#TODO make sure its always x units away from a object in environment.
+    private const int WORLD_HIGH_POINT = 12;
+    private const int WORLD_LOW_POINT = -5;
     private const int SLOW_POSITION = 1;
 
-    private const string HORIZONTAL_AXIS = "Horizontal";
-    private const string VERTICAL_AXIS = "Vertical";
+    private const string HORIZONTAL_AXIS = "CameraHorizontal";
+    private const string VERTICAL_AXIS = "CameraVertical";
 
-    [Header("Camera Sentitivity")]
+    [Header("Camera Sensitivity")]
     /// <summary>
     /// How fast it takes to reach the Y Boundaries of the game world
     /// </summary>
@@ -58,8 +59,8 @@ public class PivotFollow : MonoBehaviour
 
         if (!returningCamera)
         {
-            xAxis = Input.GetAxis(HORIZONTAL_AXIS) * movementSensitivity;
-            yAxis = Input.GetAxis(VERTICAL_AXIS) * movementSensitivity;
+            xAxis = Input.GetAxis(HORIZONTAL_AXIS) * movementSensitivity * Time.deltaTime;
+            yAxis = Input.GetAxis(VERTICAL_AXIS) * movementSensitivity * Time.deltaTime;
 
             if (xAxis != 0 || yAxis != 0)
             {

@@ -147,7 +147,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   YBoundaryDampening: 0.6
-  movementSensitivity: 1
+  movementSensitivity: 30
   returnSensitivity: 3
   followTarget: {fileID: 0}
   returningCamera: 0
@@ -171,5 +171,5 @@ MonoBehaviour:
   Ydist: 1
   minPithAngle: 5
   maxPitchAngle: 50
-  MIN_CAM_DIST: 3
-  MAX_CAM_DIST: 7
+  MIN_CAM_DIST: 2
+  MAX_CAM_DIST: 5
