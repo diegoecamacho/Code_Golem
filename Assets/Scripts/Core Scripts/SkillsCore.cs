@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using CodeGolem_UI;
+using CodeGolem.UI;
 
 namespace CodeGolem.Combat
 {

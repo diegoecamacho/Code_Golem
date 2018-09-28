@@ -1,10 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.AI;
-using CodeGolem_WeaponSystem;
-using CodeGolem_UI;
-using System;
 using CodeGolem.Combat;
+using CodeGolem.UI;
 
 namespace CodeGolem.Player
 {
@@ -22,8 +20,6 @@ namespace CodeGolem.Player
         }
 
         PlayerState State = PlayerState.MOVE;
-
-        [SerializeField] UIController IController;
 
         [SerializeField] private CharacterStats characterStats;
         [SerializeField] private GameObject pauseMenu;
@@ -63,19 +59,19 @@ namespace CodeGolem.Player
             //PoolManager.Instance.CreatePool(weaponPrefab, 3);
             //currWeapon.Init();
             //skillsUIUpdate(skillSlot1, spawnPoint);
-            if (IController == null) { Debug.LogError("Missing UI Controller"); return; }
-            if (abilities.Count > 0)
-            {
-                for (var i = 0; i < abilities.Count; i++)
-                {
-                    abilities[i].Initialize(spawnPoint);
-                }
-            }
+            //if (IController == null) { Debug.LogError("Missing UI Controller"); return; }
+            //if (abilities.Count > 0)
+            //{
+            //    for (var i = 0; i < abilities.Count; i++)
+            //    {
+            //        abilities[i].Initialize(spawnPoint);
+            //    }
+            //}
 
-            IController.InitializePlayerUI(abilities);
+            //IController.InitializePlayerUI(abilities);
 
-            //skill.AddComponent(gameObject);
-            //skill.RegisterSkill(skillIcon);
+            m_skill[0].AddComponent(gameObject);
+            m_skill[0].RegisterSkill(m_SkillIcons[0]);
 
         }
 
@@ -112,7 +108,7 @@ namespace CodeGolem.Player
                             State = PlayerState.MOVE;
                             return;
                         }
-                        //skill.Use();
+                        m_skill[0].Use();
                         State = PlayerState.MOVE;
                     }
                     break;
