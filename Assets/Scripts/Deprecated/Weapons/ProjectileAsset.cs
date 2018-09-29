@@ -1,49 +1,47 @@
-﻿
-using UnityEngine;
+﻿//using UnityEngine;
 
-namespace CodeGolem.Combat.Deprecated
-{
-    [CreateAssetMenu(fileName = "WeaponBase", menuName = "Weapon/Projectile", order = 1)]
-    public class ProjectileAsset : AbilityBase
-    {
-        public float m_bulletSpeed = 1f;
-        public float m_Damage = 0;
+//namespace CodeGolem.Combat.Deprecated
+//{
+//    [CreateAssetMenu(fileName = "WeaponBase", menuName = "Weapon/Projectile", order = 1)]
+//    public class ProjectileAsset : AbilityBase
+//    {
+//        public float m_bulletSpeed = 1f;
+//        public float m_Damage = 0;
 
-        public float m_activeDuration = 3;
+//        public float m_activeDuration = 3;
 
-        [Header("Instance:")]
-        public GameObject projectileTriggerPrefab;
-        public GameObject projectilePrefab;
+//        [Header("Instance:")]
+//        public GameObject projectileTriggerPrefab;
 
-        GameObject projectileTriggerInstance;
-        ProjectileLauncher launcher;
+//        public GameObject projectilePrefab;
 
-        public override void Initialize(Transform spawnTransform)
-        {
-  
-            projectileTriggerInstance = Instantiate(projectileTriggerPrefab, spawnTransform);
-            launcher = projectileTriggerInstance.GetComponent<ProjectileLauncher>();
-            launcher.projectileSpeed = m_bulletSpeed;
-            launcher.projectile = projectilePrefab;
-            launcher.bulletDamage = m_Damage;
-            launcher.activeTime = m_activeDuration;
-            launcher.coolDownTime = m_baseCoolDown;
-        }
+//        private GameObject projectileTriggerInstance;
+//        private ProjectileLauncher launcher;
 
-        public override void ActivateSkill()
-        {
+//        public override void Initialize(Transform spawnTransform)
+//        {
+//            projectileTriggerInstance = Instantiate(projectileTriggerPrefab, spawnTransform);
+//            launcher = projectileTriggerInstance.GetComponent<ProjectileLauncher>();
+//            launcher.projectileSpeed = m_bulletSpeed;
+//            launcher.projectile = projectilePrefab;
+//            launcher.bulletDamage = m_Damage;
+//            launcher.activeTime = m_activeDuration;
+//            launcher.coolDownTime = m_baseCoolDown;
+//        }
 
-                launcher.LaunchSkill();
-        }
+//        public override void ActivateSkill()
+//        {
+//            launcher.LaunchSkill();
+//        }
 
-        public override bool GetActive()
-        {
-            return launcher.SkillActive;
-        }
+//        public override bool GetActive()
+//        {
+//            return launcher.SkillActive;
+//        }
 
-        public override bool InCoolDown()
-        {
-            return launcher.InCoolDown;
-        }
-    }
-}
+//        public override bool InCoolDown()
+//        {
+//            return launcher.InCoolDown;
+//        }
+//    }
+//}

@@ -1,5 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.AI;
 using CodeGolem.Combat;
 using CodeGolem.UI;
@@ -10,19 +11,30 @@ namespace CodeGolem.Player
     public class PlayerController : MonoBehaviour
     {
         public delegate void UpdateSkillsUI(AbilityBase ability, GameObject spawn);
+
         public static UpdateSkillsUI skillsUIUpdate;
 
-        enum PlayerState
+        private enum PlayerState
         {
             MOVE,
             ATTACK,
             PAUSED
         }
 
-        PlayerState State = PlayerState.MOVE;
+        private PlayerState State = PlayerState.MOVE;
+        [SerializeField] MainActorStats actorStats;
 
-        [SerializeField] private CharacterStats characterStats;
-        [SerializeField] private GameObject pauseMenu;
+        public MainActorStats ActorStats
+        {
+            get
+            {
+                return actorStats;
+            }
+        }
+
+
+
+        [SerializeField] private GameObject pauseMenu; //#TODO: Move to UI Controller
 
         [SerializeField] private Transform spawnPoint; //Skill Spawn point
 
@@ -32,52 +44,35 @@ namespace CodeGolem.Player
 
         public NavMeshAgent Agent;
 
-        private bool skillActive;
+        [Header("Test Variables")]
+
+        public AbilityIcon abilityIcon;
+
+        public SkillComponent Skill;
+
 
         //Weapon System
         //#TODO Make it for each key
-        [SerializeField] List<AbilityBase> abilities;
+       // [SerializeField] private List<AbilityBase> abilities;
+       //
+       //[SerializeField] private SkillComponent[] m_skill;
+       //[SerializeField] private AbilityIcon[] m_SkillIcons;
 
-        [SerializeField] SkillComponent[] m_skill;
-        [SerializeField] AbilityIcon[] m_SkillIcons;
-
-        int inputCache = -1;
+        private int inputCache = -1;
 
         public bool allowMovement;
-        /// <summary>
-        /// Gets the current Characters stats card.
-        /// </summary>
-        /// <returns>CharacterStats</returns>
-        ///
-        public CharacterStats GetStatsCard()
-        {
-            return characterStats;
-        }
+
+       
 
         private void Start()
         {
-            //PoolManager.Instance.CreatePool(weaponPrefab, 3);
-            //currWeapon.Init();
-            //skillsUIUpdate(skillSlot1, spawnPoint);
-            //if (IController == null) { Debug.LogError("Missing UI Controller"); return; }
-            //if (abilities.Count > 0)
-            //{
-            //    for (var i = 0; i < abilities.Count; i++)
-            //    {
-            //        abilities[i].Initialize(spawnPoint);
-            //    }
-            //}
-
-            //IController.InitializePlayerUI(abilities);
-
-            m_skill[0].AddComponent(gameObject);
-            m_skill[0].RegisterSkill(m_SkillIcons[0]);
-
+            ActorStats.RegisterSkill(Skill, abilityIcon);
         }
 
         // Update is called once per frame
         private void Update()
         {
+
             if (Input.GetKeyDown(KeyCode.Escape))
             {
                 PauseGame();
@@ -86,7 +81,6 @@ namespace CodeGolem.Player
                 else
                     State = PlayerState.MOVE;
             }
-
 
             switch (State)
             {
@@ -100,28 +94,31 @@ namespace CodeGolem.Player
                         }
                     }
                     break;
+
                 case PlayerState.ATTACK:
                     {
-                        if (abilities.Count == 0)
-                        {
-                            Debug.LogError("No Player Abilities");
-                            State = PlayerState.MOVE;
-                            return;
-                        }
-                        m_skill[0].Use();
-                        State = PlayerState.MOVE;
+                        ActorStats.UseSkill(0, gameObject);
+                       // if (abilities.Count == 0)
+                       // {
+                       //     Debug.LogError("No Player Abilities");
+                       //     State = PlayerState.MOVE;
+                       //     return;
+                       // }
+                       // m_skill[0].Use();
+                       // State = PlayerState.MOVE;
                     }
                     break;
+
                 case PlayerState.PAUSED:
                     break;
+
                 default:
                     break;
             }
         }
 
-        void PlayerMove()
+        private void PlayerMove()
         {
-
             if (Input.GetAxis("PlayerActive") == 1)
             {
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -137,15 +134,14 @@ namespace CodeGolem.Player
             }
         }
 
-
         //#TODO: Move to global function
-        void PauseGame()
+        private void PauseGame()
         {
             pauseMenu.SetActive(!pauseMenu.activeSelf);
             UIenabled = !UIenabled;
         }
 
-        int PlayerAttackInput()
+        private int PlayerAttackInput()
         {
             if (Input.GetButtonDown("SkillSlot1"))
             {

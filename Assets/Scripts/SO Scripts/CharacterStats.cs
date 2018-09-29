@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿
+using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "CharacterStats", menuName = "Character/Stats", order = 1)]
@@ -6,19 +7,20 @@ public class CharacterStats : ScriptableObject
 {
     private int level = 1;
 
-    private IDictionary<string, int> playerStars = new Dictionary<string, int>(){
-        {"Strength" , 10 },
-        {"Constitution" , 10 },
-        {"Intelligence" , 10 },
-        {"Defense" , 10 }
-    };
+    public int strength = 10;
+    public int constitution = 10;
+    public int intelligence = 10;
+    public int defense = 10;
+
+
+   
 
     public int Strength
     {
-        get { return playerStars["Strength"]; }
+        get { return strength; }
         set
         {
-            playerStars["Strength"] = value;
+            strength = value;
             if (EventManager.onStatsUpdate != null)
             {
                 EventManager.onStatsUpdate();
@@ -28,11 +30,11 @@ public class CharacterStats : ScriptableObject
 
     public int Constitution
     {
-        get { return playerStars["Constitution"]; }
+        get { return constitution; }
 
         set
         {
-            playerStars["Constitution"] = value;
+            constitution = value;
             if (EventManager.onStatsUpdate != null)
             {
                 EventManager.onStatsUpdate();
@@ -42,11 +44,11 @@ public class CharacterStats : ScriptableObject
 
     public int Intelligence
     {
-        get { return playerStars["Intelligence"]; }
+        get { return intelligence; }
 
         set
         {
-            playerStars["Intelligence"] = value;
+            intelligence = value;
             if (EventManager.onStatsUpdate != null)
             {
                 EventManager.onStatsUpdate();
@@ -56,26 +58,10 @@ public class CharacterStats : ScriptableObject
 
     public int Defense
     {
-        get { return playerStars["Defense"]; ; }
+        get { return defense; }
         set
         {
-            playerStars["Defense"] = value;
-            if (EventManager.onStatsUpdate != null)
-            {
-                EventManager.onStatsUpdate();
-            }
-        }
-    }
-
-    public int this[string i]
-    {
-        get
-        {
-            return playerStars[i];
-        }
-        set
-        {
-            playerStars[i] = value;
+            defense = value;
             if (EventManager.onStatsUpdate != null)
             {
                 EventManager.onStatsUpdate();

@@ -18,24 +18,24 @@ namespace Menus
         {
             switch (SumStat)
             {
-                case StatsType.STRENGTH:
-                    StatsMenu.focusCharacter.GetStatsCard()["Strength"]++;
-                    break;
-
-                case StatsType.CONSTITUTION:
-                    StatsMenu.focusCharacter.GetStatsCard()["Constitution"]++;
-                    break;
-
-                case StatsType.INTELLIGENCE:
-                    StatsMenu.focusCharacter.GetStatsCard()["Intelligence"]++;
-                    break;
-
-                case StatsType.DEFENSE:
-                    StatsMenu.focusCharacter.GetStatsCard()["Defense"]++;
-                    break;
-
-                default:
-                    break;
+               case StatsType.STRENGTH:
+                   StatsMenu.focusCharacter.ActorStats.CharacterStats.Strength++;
+                   break;
+              
+               case StatsType.CONSTITUTION:
+                   StatsMenu.focusCharacter.ActorStats.CharacterStats.Constitution++;
+                   break;
+              
+               case StatsType.INTELLIGENCE:
+                   StatsMenu.focusCharacter.ActorStats.CharacterStats.Intelligence++;
+                   break;
+              
+               case StatsType.DEFENSE:
+                   StatsMenu.focusCharacter.ActorStats.CharacterStats.Defense++;
+                   break;
+              
+               default:
+                   break;
             }
         }
     }

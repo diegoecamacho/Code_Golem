@@ -4,6 +4,7 @@ public class PivotFollow : MonoBehaviour
 {
     //#TODO make sure its always x units away from a object in environment.
     private const int WORLD_HIGH_POINT = 12;
+
     private const int WORLD_LOW_POINT = -5;
     private const int SLOW_POSITION = 1;
 

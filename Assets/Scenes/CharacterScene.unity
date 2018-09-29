@@ -707,12 +707,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &504290864 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 114259066300846622, guid: e22d018d830f0954f8433658e0dffa38,
-    type: 2}
-  m_PrefabInternal: {fileID: 1664107022}
-  m_Script: {fileID: 11500000, guid: 38170b14dc856e243b2cbbbf848ef256, type: 3}
 --- !u!1 &506576101
 GameObject:
   m_ObjectHideFlags: 0
@@ -1064,6 +1058,12 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 756698817}
   m_CullTransparentMesh: 0
+--- !u!114 &794126246 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 114259066300846622, guid: e22d018d830f0954f8433658e0dffa38,
+    type: 2}
+  m_PrefabInternal: {fileID: 1664107022}
+  m_Script: {fileID: 11500000, guid: 38170b14dc856e243b2cbbbf848ef256, type: 3}
 --- !u!1 &824686623
 GameObject:
   m_ObjectHideFlags: 0
@@ -1277,16 +1277,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6adb8558325fac74e94aedb24218d3c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterStats: {fileID: 11400000, guid: 1d140b2ab94ab2a4fa0e24ed1fa11cdb, type: 2}
+  actorStats:
+    characterStats: {fileID: 11400000, guid: 8b67d66db4e0026459ca6d356d4f0cd0, type: 2}
+    playerSkills: []
   pauseMenu: {fileID: 1426298861}
   spawnPoint: {fileID: 506576102}
   Agent: {fileID: 1066300341}
-  abilities:
-  - {fileID: 11400000, guid: 77c567ea429284648bb38c5575ca6f01, type: 2}
-  m_skill:
-  - {fileID: 11400000, guid: 978b15d100d20604cb081ce0487b780b, type: 2}
-  m_SkillIcons:
-  - {fileID: 504290864}
+  abilityIcon: {fileID: 794126246}
+  Skill: {fileID: 11400000, guid: ebe510ea9c749404889faad2fd59416c, type: 2}
   allowMovement: 0
 --- !u!195 &1066300341
 NavMeshAgent:

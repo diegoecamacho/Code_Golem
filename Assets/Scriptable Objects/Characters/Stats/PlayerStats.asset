@@ -9,9 +9,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b538ef0c5f876034f93e15926cc84cde, type: 3}
-  m_Name: BameStats
+  m_Name: PlayerStats
   m_EditorClassIdentifier: 
-  Strenght: 10
-  Constitution: 10
-  Intelligence: 10
-  Defense: 10
+  strength: 10
+  constitution: 10
+  intelligence: 10
+  defense: 10

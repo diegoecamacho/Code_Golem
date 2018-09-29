@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using CodeGolem.UI;
+﻿using CodeGolem.UI;
 using UnityEngine;
 
 namespace CodeGolem.Combat
@@ -9,17 +7,24 @@ namespace CodeGolem.Combat
     public class ProjectileGunInterface : SkillComponent
     {
         [Header("Projectile Components")]
-        [SerializeField] float m_projectileSpeed;
+         public float m_projectileSpeed;
+         public GameObject bulletPrefab;
 
-        ISkillInterface projectileGunBehaviour;
+        private ISkillInterface projectileGunBehaviour;
 
         private AbilityIcon abilityIcon;
+
         public AbilityIcon AbilityIcon
         {
             get
             {
                 return abilityIcon;
             }
+        }
+
+        public override ISkillInterface GetBehaviour()
+        {
+            return projectileGunBehaviour;
         }
 
         public override void AddComponent(GameObject objToAdd)
@@ -45,13 +50,10 @@ namespace CodeGolem.Combat
             }
         }
 
-
-
-        bool IsActive()
+        private bool IsActive()
         {
             Debug.Log(abilityIcon.IsActive() || projectileGunBehaviour.IsActive());
             return (abilityIcon.IsActive() || projectileGunBehaviour.IsActive());
         }
-
     }
 }

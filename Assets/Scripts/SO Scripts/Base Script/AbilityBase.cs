@@ -6,6 +6,7 @@ namespace CodeGolem.Combat
     {
         //public string m_Name;
         public Sprite m_Sprite;
+
         public float m_baseCoolDown = 1f;
         public bool allowMovement = false;
 

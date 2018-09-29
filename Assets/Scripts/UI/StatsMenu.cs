@@ -1,6 +1,6 @@
-﻿using UnityEngine;
+﻿using CodeGolem.Player;
+using UnityEngine;
 using UnityEngine.UI;
-using CodeGolem.Player;
 
 namespace Menus
 {
@@ -25,11 +25,11 @@ namespace Menus
 
         private void UpdateUI()
         {
-            m_LevelStatsText.text = focusCharacter.GetStatsCard().GetPlayerLevel().ToString();
-            m_StrengthText.text = focusCharacter.GetStatsCard().Strength.ToString();
-            m_IntelligenceText.text = focusCharacter.GetStatsCard().Intelligence.ToString();
-            m_ConstitutionText.text = focusCharacter.GetStatsCard().Constitution.ToString();
-            m_DefenseText.text = focusCharacter.GetStatsCard().Defense.ToString();
+            m_LevelStatsText.text = focusCharacter.ActorStats.CharacterStats.GetPlayerLevel().ToString();
+            m_StrengthText.text = focusCharacter.ActorStats.CharacterStats.Strength.ToString();
+            m_IntelligenceText.text = focusCharacter.ActorStats.CharacterStats.Intelligence.ToString();
+            m_ConstitutionText.text = focusCharacter.ActorStats.CharacterStats.Constitution.ToString();
+            m_DefenseText.text = focusCharacter.ActorStats.CharacterStats.Defense.ToString();
         }
     }
 }

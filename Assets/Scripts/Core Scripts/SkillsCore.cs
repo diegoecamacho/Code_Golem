@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using CodeGolem.UI;
+﻿using CodeGolem.UI;
+using UnityEngine;
 
 namespace CodeGolem.Combat
 {
@@ -7,11 +7,11 @@ namespace CodeGolem.Combat
     /// Skill Parameter Structure
     /// Used to pass in target Information to Skills.
     /// </summary>
-    struct SkillParam
+    internal struct SkillParam
     {
-        Vector3 target;
+        private Vector3 target;
 
-        SkillParam(Vector3 destination)
+        private SkillParam(Vector3 destination)
         {
             target = destination;
         }
@@ -23,16 +23,20 @@ namespace CodeGolem.Combat
     public interface ISkillInterface
     {
         void Use();
+
         void SetConfig(SkillComponent skillConfig);
+
         bool IsActive();
+
+        void DestroyComponent();
     }
 
     /// <summary>
     /// Skill Data Container all skills.
     /// Required: All skills must have a Data Container<Skill Component> and a behavior<ISkillInterface>
     /// </summary>
-    public abstract class SkillComponent : ScriptableObject {
-    
+    public abstract class SkillComponent : ScriptableObject
+    {
         [Header("Core Components")]
         public Sprite imageSprite;
         public float coolDown;
@@ -55,5 +59,7 @@ namespace CodeGolem.Combat
         /// Use function for the skill
         /// </summary>
         public abstract void Use();
+
+        public abstract ISkillInterface GetBehaviour();
     }
 }
