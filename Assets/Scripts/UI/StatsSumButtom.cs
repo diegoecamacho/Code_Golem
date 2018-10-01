@@ -19,19 +19,19 @@ namespace Menus
             switch (SumStat)
             {
                case StatsType.STRENGTH:
-                   StatsMenu.focusCharacter.ActorStats.CharacterStats.Strength++;
+                   StatsMenu.focusCharacter.ActorStats.Strength++;
                    break;
               
                case StatsType.CONSTITUTION:
-                   StatsMenu.focusCharacter.ActorStats.CharacterStats.Constitution++;
+                   StatsMenu.focusCharacter.ActorStats.Constitution++;
                    break;
               
                case StatsType.INTELLIGENCE:
-                   StatsMenu.focusCharacter.ActorStats.CharacterStats.Intelligence++;
+                   StatsMenu.focusCharacter.ActorStats.Intelligence++;
                    break;
               
                case StatsType.DEFENSE:
-                   StatsMenu.focusCharacter.ActorStats.CharacterStats.Defense++;
+                   StatsMenu.focusCharacter.ActorStats.Defense++;
                    break;
               
                default:

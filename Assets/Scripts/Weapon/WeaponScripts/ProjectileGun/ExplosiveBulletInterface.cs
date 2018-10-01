@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using CodeGolem.Combat;
 using CodeGolem.UI;
 
@@ -39,12 +37,11 @@ public class ExplosiveBulletInterface : SkillComponent {
         abilityIcon.coolDownDuration = coolDown;
     }
 
-    public override void Use()
+    public override void Enable()
     {
         if (!IsActive())
         {
-            //abilityIcon.ActivateSkill();
-            projectileGunBehaviour.Use();
+            projectileGunBehaviour.EnableSkill();
             abilityIcon.EnableIconEffect();
         }
     }
@@ -53,5 +50,10 @@ public class ExplosiveBulletInterface : SkillComponent {
     {
         Debug.Log(abilityIcon.IsActive() || projectileGunBehaviour.IsActive());
         return (abilityIcon.IsActive() || projectileGunBehaviour.IsActive());
+    }
+
+    public override void Use(SkillParam skillParam)
+    {
+        throw new System.NotImplementedException();
     }
 }

@@ -1,5 +1,6 @@
-﻿using CodeGolem.UI;
-using UnityEngine;
+﻿using UnityEngine;
+using CodeGolem.UI;
+using CodeGolem.Player;
 
 namespace CodeGolem.Combat
 {
@@ -7,12 +8,14 @@ namespace CodeGolem.Combat
     /// Skill Parameter Structure
     /// Used to pass in target Information to Skills.
     /// </summary>
-    internal struct SkillParam
+    public struct SkillParam
     {
-        private Vector3 target;
+        public PlayerController Actor;
+        public Vector3 target;
 
-        private SkillParam(Vector3 destination)
+        public SkillParam(PlayerController ActorGO, Vector3 destination)
         {
+            Actor = ActorGO;
             target = destination;
         }
     }
@@ -22,7 +25,9 @@ namespace CodeGolem.Combat
     /// </summary>
     public interface ISkillInterface
     {
-        void Use();
+        void EnableSkill();
+
+        void UseSkill(SkillParam skillParams);
 
         void SetConfig(SkillComponent skillConfig);
 
@@ -43,6 +48,8 @@ namespace CodeGolem.Combat
         public float mpCost;
         public float Damage;
 
+        public bool allowMovement;
+
         /// <summary>
         /// Adds the skill behavior to the Actor GameObject
         /// </summary>
@@ -58,7 +65,11 @@ namespace CodeGolem.Combat
         /// <summary>
         /// Use function for the skill
         /// </summary>
-        public abstract void Use();
+        public abstract void Enable();
+
+
+        public abstract void Use(SkillParam skillParam);
+
 
         public abstract ISkillInterface GetBehaviour();
     }

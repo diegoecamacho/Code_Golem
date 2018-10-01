@@ -25,11 +25,11 @@ namespace Menus
 
         private void UpdateUI()
         {
-            m_LevelStatsText.text = focusCharacter.ActorStats.CharacterStats.GetPlayerLevel().ToString();
-            m_StrengthText.text = focusCharacter.ActorStats.CharacterStats.Strength.ToString();
-            m_IntelligenceText.text = focusCharacter.ActorStats.CharacterStats.Intelligence.ToString();
-            m_ConstitutionText.text = focusCharacter.ActorStats.CharacterStats.Constitution.ToString();
-            m_DefenseText.text = focusCharacter.ActorStats.CharacterStats.Defense.ToString();
+            m_LevelStatsText.text = focusCharacter.ActorStats.GetPlayerLevel().ToString();
+            m_StrengthText.text = focusCharacter.ActorStats.Strength.ToString();
+            m_IntelligenceText.text = focusCharacter.ActorStats.Intelligence.ToString();
+            m_ConstitutionText.text = focusCharacter.ActorStats.Constitution.ToString();
+            m_DefenseText.text = focusCharacter.ActorStats.Defense.ToString();
         }
     }
 }

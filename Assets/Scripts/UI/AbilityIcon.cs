@@ -22,7 +22,6 @@ namespace CodeGolem.UI
 
         private void Start()
         {
-            buttomImage = GetComponent<Image>();
         }
 
         /// <summary>

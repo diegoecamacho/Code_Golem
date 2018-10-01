@@ -107,6 +107,7 @@ GameObject:
   - component: {fileID: 224755867451982058}
   - component: {fileID: 222911160094607408}
   - component: {fileID: 114494427514224332}
+  - component: {fileID: 114254995067128884}
   m_Layer: 5
   m_Name: AbilityIcon 1
   m_TagString: Untagged
@@ -434,7 +435,6 @@ GameObject:
   - component: {fileID: 224472974445201864}
   - component: {fileID: 222951077728771794}
   - component: {fileID: 114255686227335550}
-  - component: {fileID: 114259066300846622}
   m_Layer: 5
   m_Name: Icon
   m_TagString: Untagged
@@ -539,6 +539,22 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114254995067128884
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1182576297872660}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38170b14dc856e243b2cbbbf848ef256, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buttomImage: {fileID: 114255686227335550}
+  darkMask: {fileID: 114468288082367670}
+  activeMask: {fileID: 114494427514224332}
+  coolDownText: {fileID: 114957614492304250}
+  coolDownDuration: 0
 --- !u!114 &114255686227335550
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -566,22 +582,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114259066300846622
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1889225419814702}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 38170b14dc856e243b2cbbbf848ef256, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  buttomImage: {fileID: 0}
-  darkMask: {fileID: 114468288082367670}
-  activeMask: {fileID: 114494427514224332}
-  coolDownText: {fileID: 114957614492304250}
-  coolDownDuration: 0
 --- !u!114 &114290679087934238
 MonoBehaviour:
   m_ObjectHideFlags: 1

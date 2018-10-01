@@ -7,67 +7,59 @@ namespace CodeGolem.Combat
         private ProjectileGunInterface projectileGun;
 
         [Header("Instance Specific")]
-        private bool skillInUse = false;
+        private bool skillActive = false;
+        private bool useSkill = false;
+
 
         private float activeTime = 0;
 
-        GameObject pointer;
+        SkillParam skillParam;
+
+
+        
 
         // Update is called once per frame
         private void Update()
         {
-            if (skillInUse)
+            if (skillActive)
             {
                 activeTime += Time.deltaTime;
-                if (pointer == null)
-                {
-                    pointer = Instantiate(Resources.Load("MousePointer")) as GameObject;
-                }
+                
                 if (activeTime >= projectileGun.coolDown)
                 {
-                    if (pointer)
-                    {
-                        Destroy(pointer);
-                    }
                     SkillCooldown();
                 }
             }
         }
 
-        void LateUpdate()
+        void FixedUpdate()
         {
-            if (skillInUse)
+            if (useSkill && skillActive)
             {
-                RaycastHit hit;
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                Rigidbody bulClone = Instantiate(projectileGun.bulletPrefab, skillParam.Actor.SpawnPoint.position , Quaternion.identity, null).GetComponent<Rigidbody>();
+                Vector3 BulDir = skillParam.target - skillParam.Actor.transform.position;
+                bulClone.AddForce(BulDir * projectileGun.m_projectileSpeed * Time.deltaTime, ForceMode.Impulse);
 
-                if (Physics.Raycast(ray , out hit))
-                {
-                    pointer.transform.position = new Vector3(hit.point.x, hit.point.y + 0.2f, hit.point.z);
-                    Vector3 hitPointatLevel = new Vector3(hit.point.x, transform.position.y, hit.point.z);
-                    if (Input.GetButtonDown("PlayerActive"))
-                    {
-                      // Rigidbody bulletClone = Instantiate(projectileGun.bulletPrefab,;
-                    }
-                }
+                Destroy(bulClone.gameObject, 5.0f);
+                useSkill = false;
             }
         }
 
         private void SkillCooldown()
         {
             projectileGun.AbilityIcon.ActivateIconCoolDown();
-            skillInUse = false;
+            skillActive = false;
             activeTime = 0;
         }
 
-        public void Use()
+        public void EnableSkill()
         {
-            skillInUse = true;
+            skillActive = true;
         }
 
         public bool IsActive()
         {
-            return skillInUse;
+            return skillActive;
         }
 
         public void SetConfig(SkillComponent skillConfig)
@@ -78,6 +70,12 @@ namespace CodeGolem.Combat
         public void DestroyComponent()
         {
             Destroy(GetComponent<ProjectileGunBehaviour>());
+        }
+
+        public void UseSkill(SkillParam skillParams)
+        {
+            skillParam = skillParams;
+            useSkill = true;
         }
     }
 }

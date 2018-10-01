@@ -15,4 +15,7 @@ MonoBehaviour:
   coolDown: 5
   mpCost: 10
   Damage: 5
-  m_projectileSpeed: 10
+  allowMovement: 1
+  m_projectileSpeed: 100
+  bulletPrefab: {fileID: 1128584250154894, guid: 23ef29cfd42ab2f4ca88020f963364e4,
+    type: 2}

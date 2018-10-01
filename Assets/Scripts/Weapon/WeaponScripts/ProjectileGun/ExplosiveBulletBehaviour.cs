@@ -7,14 +7,17 @@ public class ExplosiveBulletBehaviour : MonoBehaviour , ISkillInterface {
     private ProjectileGunInterface projectileGun;
 
     [Header("Instance Specific")]
-    private bool skillInUse = false;
+    private bool skillActive = false;
+    private bool useSkill = false;
 
     private float activeTime = 0;
+
+    SkillParam skillParam;
 
     // Update is called once per frame
     private void Update()
     {
-        if (skillInUse)
+        if (skillActive)
         {
             Debug.Log("Skill Active");
             activeTime += Time.deltaTime;
@@ -25,21 +28,29 @@ public class ExplosiveBulletBehaviour : MonoBehaviour , ISkillInterface {
         }
     }
 
+    void FixedUpdate()
+    {
+        if (useSkill && skillActive)
+        {
+            Debug.LogWarning("Weapon Behaviour not Implemented!");
+        }
+    }
+
     private void SkillCooldown()
     {
         projectileGun.AbilityIcon.ActivateIconCoolDown();
-        skillInUse = false;
+        skillActive = false;
         activeTime = 0;
     }
 
     public void Use()
     {
-        skillInUse = true;
+        skillActive = true;
     }
 
     public bool IsActive()
     {
-        return skillInUse;
+        return skillActive;
     }
 
     public void SetConfig(SkillComponent skillConfig)
@@ -50,5 +61,16 @@ public class ExplosiveBulletBehaviour : MonoBehaviour , ISkillInterface {
     public void DestroyComponent()
     {
         Destroy(GetComponent<ProjectileGunBehaviour>());
+    }
+
+    public void EnableSkill()
+    {
+        skillActive = true;
+    }
+
+    public void UseSkill(SkillParam skillParams)
+    {
+        skillParam = skillParams;
+        useSkill = true;
     }
 }

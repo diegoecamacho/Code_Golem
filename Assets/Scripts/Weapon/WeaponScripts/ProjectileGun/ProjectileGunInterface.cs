@@ -40,14 +40,19 @@ namespace CodeGolem.Combat
             abilityIcon.coolDownDuration = coolDown;
         }
 
-        public override void Use()
+        public override void Enable()
         {
             if (!IsActive())
             {
                 //abilityIcon.ActivateSkill();
-                projectileGunBehaviour.Use();
+                projectileGunBehaviour.EnableSkill();
                 abilityIcon.EnableIconEffect();
             }
+        }
+
+        public override void Use(SkillParam skillParam)
+        {
+            projectileGunBehaviour.UseSkill(skillParam);
         }
 
         private bool IsActive()
