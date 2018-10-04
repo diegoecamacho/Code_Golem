@@ -1,5 +1,6 @@
 ﻿using CodeGolem.Actor;
 using UnityEngine;
+using CodeGolem.Player;
 
 namespace CodeGolem.Enemy
 {
@@ -15,6 +16,13 @@ namespace CodeGolem.Enemy
         [SerializeField] private float damage;
         [SerializeField] private float speed;
         [SerializeField] private float timeToExplode;
+
+        PlayerController Player;
+
+        private void Start()
+        {
+            Player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        }
 
         public void Attack()
         {
@@ -41,6 +49,7 @@ namespace CodeGolem.Enemy
             Debug.Log("Collision");
             if (collision.transform.tag == "Bullet")
             {
+                Player.ActorStats.Experience++;
                 Destroy(gameObject , timeToExplode);
             }
 

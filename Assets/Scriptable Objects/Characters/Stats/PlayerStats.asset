@@ -12,13 +12,15 @@ MonoBehaviour:
   m_Name: PlayerStats
   m_EditorClassIdentifier: Assembly-CSharp:CodeGolem.Actor:PlayerStats
   level: 1
-  health: 90
+  health: 80
   manaPoints: 100
+  experience: 3
+  experienceToNextLevel: 10
   baseDamage: 10
   strength: 16
-  constitution: 10
-  intelligence: 10
-  defense: 10
+  constitution: 12
+  intelligence: 13
+  defense: 12
   dashAmount: 4
   playerSkills:
   - {fileID: 11400000, guid: ebe510ea9c749404889faad2fd59416c, type: 2}

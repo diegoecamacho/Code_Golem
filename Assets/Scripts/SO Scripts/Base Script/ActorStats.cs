@@ -9,6 +9,8 @@ namespace CodeGolem.Actor
 
         [SerializeField] protected float health = 100f;
         [SerializeField] protected float manaPoints = 100f;
+        [SerializeField] protected float experience = 0f;
+        [SerializeField] protected float experienceToNextLevel;
 
         [Header("Fixed Values")]
         protected float totalHealth = 100;

@@ -20,6 +20,7 @@ namespace CodeGolem.Actor
         [Header("Player Skills")]
         [SerializeField] private List<SkillComponent> playerSkills = new List<SkillComponent>();
 
+
         public float Health
         {
             get
@@ -44,6 +45,19 @@ namespace CodeGolem.Actor
             set
             {
                 manaPoints = value;
+                VitalUISEvent(this);
+            }
+        }
+
+        public float Experience
+        {
+            get
+            {
+                return experience;
+            }
+            set
+            {
+                experience = value;
                 VitalUISEvent(this);
             }
         }
@@ -137,6 +151,19 @@ namespace CodeGolem.Actor
             get
             {
                 return playerSkills;
+            }
+        }
+
+        public float ExperiencetoNextLevel
+        {
+            get
+            {
+                return experienceToNextLevel;
+
+            }
+            set
+            {
+                experienceToNextLevel = value;
             }
         }
 

@@ -14,6 +14,8 @@ namespace CodeGolem.UI {
 
         [SerializeField] AbilityIcon[] abilityIcons;
 
+        [SerializeField] Slider ExperienceSlider;
+
 
 
         private void Start()
@@ -30,6 +32,7 @@ namespace CodeGolem.UI {
         {
             HealthImage.fillAmount = actorStats.Health / actorStats.TotalHealth;
             ManaImage.fillAmount = actorStats.ManaPoints / actorStats.TotalMana;
+            ExperienceSlider.value = actorStats.Experience / actorStats.ExperiencetoNextLevel;
             for (int i = 0; i < DashImages.Length; i++)
             {
                 if (i >= actorStats.DashAmount)
