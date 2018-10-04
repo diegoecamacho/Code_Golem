@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - WalkableGround
+  - Bullet
   layers:
   - Default
   - TransparentFX

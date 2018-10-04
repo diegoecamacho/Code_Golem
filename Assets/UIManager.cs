@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using CodeGolem.Player;
+using CodeGolem.Actor;
 
 namespace CodeGolem.UI {
     public class UIManager : MonoBehaviour {
@@ -18,7 +18,7 @@ namespace CodeGolem.UI {
 
         private void Start()
         {
-            MainActorStats.VitalUISEvent += UpdateHealth;
+            PlayerStats.VitalUISEvent += UpdateHealth;
         }
 
         private void Update()
@@ -26,7 +26,7 @@ namespace CodeGolem.UI {
            
         }
 
-        void UpdateHealth(MainActorStats actorStats)
+        void UpdateHealth(PlayerStats actorStats)
         {
             HealthImage.fillAmount = actorStats.Health / actorStats.TotalHealth;
             ManaImage.fillAmount = actorStats.ManaPoints / actorStats.TotalMana;

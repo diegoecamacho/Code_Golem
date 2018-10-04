@@ -1,6 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+
 
 public class PlayerMovement : MonoBehaviour {
 
@@ -37,5 +36,10 @@ public class PlayerMovement : MonoBehaviour {
     {
         MoveActive = true;
         destination = new Vector3(destPoint.x, destPoint.y + 0.9f ,destPoint.z);
+    }
+
+    public void TakeDamage(float damage)
+    {
+        throw new System.NotImplementedException();
     }
 }

@@ -166,10 +166,10 @@ MonoBehaviour:
   MouseSensitivity: 5
   scrollSentitivity: 2
   orbitDampening: 6
-  scrollDampening: 5
+  scrollDampening: 1
   enableCamera: 0
   Ydist: 1
   minPithAngle: 5
-  maxPitchAngle: 50
+  maxPitchAngle: 20
   MIN_CAM_DIST: 2
   MAX_CAM_DIST: 5

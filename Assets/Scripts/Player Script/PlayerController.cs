@@ -2,6 +2,7 @@
 using CodeGolem.UI;
 using UnityEngine;
 using UnityEngine.AI;
+using CodeGolem.Actor;
 
 namespace CodeGolem.Player
 {
@@ -11,10 +12,8 @@ namespace CodeGolem.Player
         DASH
     }
 
-    public class PlayerController : MonoBehaviour
+    public class PlayerController : MonoBehaviour , IDamageable
     {
-        
-
         private enum PlayerState
         {
             MOVE,
@@ -25,9 +24,9 @@ namespace CodeGolem.Player
         private PlayerState State = PlayerState.MOVE;
 
         [Header("Character Class")]
-        [SerializeField] private MainActorStats actorStats;
+        [SerializeField] private PlayerStats actorStats;
 
-        public MainActorStats ActorStats
+        public PlayerStats ActorStats
         {
             get
             {
@@ -71,7 +70,7 @@ namespace CodeGolem.Player
 
         [Header("Navigation Mesh Agent")]
         //public NavMeshAgent Agent;
-        public PlayerMovement Agent;
+        public NavMeshAgent Agent;
 
         [Header("InputManager")]
         private int inputCache = -1;
@@ -94,17 +93,17 @@ namespace CodeGolem.Player
         [Range(0, 100)]
         public float DebugMana = 100;
 
+        private Vector3 hitPosition;
+
         private void Start()
         {
             dashCooldown = timeBetweenDash;
-            actorStats.DashAmount = 4;
+            ActorStats.DashAmount = 4;
             ActorStats.RegisterSkill(Skill, abilityIcon);
         }
 
         private void Update()
         {
-            actorStats.Health = DebugHealth;
-            actorStats.ManaPoints = DebugMana;
             if (Input.GetKeyDown(KeyCode.Escape))
             {
                 PauseGame();
@@ -173,7 +172,11 @@ namespace CodeGolem.Player
                     {
                         SetPlayerSpeed(PlayerMovementType.WALK);
                         ClickLocation = hit.point;
-                        Agent.SetDestination(hit.point);
+                        
+                        float y = hit.collider.transform.position.y + 1;
+
+                        Vector3 hitLocMod = new Vector3(hit.point.x, y, hit.point.z);
+                        Agent.SetDestination(hitLocMod);
                     }
                 }
             }
@@ -191,8 +194,6 @@ namespace CodeGolem.Player
             }
         }
 
-        //#TODO: FIX Dash.
-        //Remove Nav Mesh Agent and implement Own
         private void ActivateDash(RaycastHit hit)
         {
             if (!dashonCooldown && actorStats.DashAmount > 0)
@@ -201,20 +202,12 @@ namespace CodeGolem.Player
                 actorStats.DashAmount--;
                 dashonCooldown = true;
 
-                Vector3 midPoint = (hit.point + transform.position) / 2;
                 Vector3 dir = hit.point - transform.position;
-
-                if (Vector3.Distance(transform.position, hit.point) < 20)
-                {
-                    Vector3 dashPoint = (midPoint + (dashDistance * dir));
-                    Agent.SetDestination(hit.point);
-                    ClickLocation = dashPoint;
-                }
-                else
-                {
-                    Agent.SetDestination(hit.point);
-                    ClickLocation = midPoint;
-                }
+                Vector3 DashPoint = transform.position + (dir * dashDistance);
+                Agent.transform.position = DashPoint;
+                Agent.SetDestination(Agent.transform.position);
+                ClickLocation = DashPoint;
+              
             }
         }
 
@@ -228,14 +221,14 @@ namespace CodeGolem.Player
             {
                 case PlayerMovementType.WALK:
                     {
-                        Agent.movementSpeed = baseMovementSpeed;
+                        Agent.speed = baseMovementSpeed;
                         Agent.acceleration = baseAcceleration;
                     }
                     break;
 
                 case PlayerMovementType.DASH:
                     {
-                        Agent.movementSpeed = dashMovementSpeed;
+                        Agent.speed = dashMovementSpeed;
                         Agent.acceleration = dashAcceleration;
                     }
                     break;
@@ -309,5 +302,24 @@ namespace CodeGolem.Player
             }
             return -1;
         }
+
+        private void OnDrawGizmos()
+        {
+            Gizmos.DrawWireSphere(ClickLocation, 0.1f);
+        }
+
+        public void TakeDamage(float damage)
+        {
+            Debug.Log("Damage Taken");
+            ActorStats.Health = actorStats.Health - damage;
+            Debug.Log(actorStats.Health);
+        }
+
+        public void Attack()
+        {
+            throw new System.NotImplementedException();
+        }
     }
+
+    
 }

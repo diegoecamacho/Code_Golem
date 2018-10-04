@@ -25,7 +25,7 @@ namespace Menus
 
         private void UpdateUI()
         {
-            m_LevelStatsText.text = focusCharacter.ActorStats.GetPlayerLevel().ToString();
+            m_LevelStatsText.text = focusCharacter.ActorStats.GetLevel().ToString();
             m_StrengthText.text = focusCharacter.ActorStats.Strength.ToString();
             m_IntelligenceText.text = focusCharacter.ActorStats.Intelligence.ToString();
             m_ConstitutionText.text = focusCharacter.ActorStats.Constitution.ToString();

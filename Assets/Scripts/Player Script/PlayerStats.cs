@@ -3,32 +3,19 @@ using CodeGolem.UI;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace CodeGolem.Player
+namespace CodeGolem.Actor
 {
-    [CreateAssetMenu(fileName = "MainActorStatsTemplate", menuName = "Character/Stats", order = 1)]
-    public class MainActorStats : ScriptableObject
+    [CreateAssetMenu(fileName = "PlayerStatsTemplate", menuName = "Character/Stats", order = 1)]
+    public class PlayerStats : ActorStats
     {
-        public delegate void VitalUIUpdater(MainActorStats actor);
+        public delegate void VitalUIUpdater(PlayerStats actor);
         public static event VitalUIUpdater VitalUISEvent;
 
-        public delegate void StatsUIUpdater(MainActorStats actor);
+        public delegate void StatsUIUpdater(PlayerStats actor);
         public static event StatsUIUpdater StatsUIEvent;
 
-        [Header("Core Stats")]
-        [SerializeField] private int level = 1;
-        [SerializeField] private float health = 100f;
-        [SerializeField] private float manaPoints = 100f;
-        [SerializeField] private  int  dashAmount = 4;
-
-     
-        private float totalHealth = 100;
-        private float totalMana = 100f;
-
-        [Header("Player Stats")]
-        [SerializeField] private int strength = 10;
-        [SerializeField] private int constitution = 10;
-        [SerializeField] private int intelligence = 10;
-        [SerializeField] private int defense = 10;
+        [Header("Player Only Stats")]
+        [SerializeField] protected int dashAmount = 4;
 
         [Header("Player Skills")]
         [SerializeField] private List<SkillComponent> playerSkills = new List<SkillComponent>();
@@ -197,24 +184,9 @@ namespace CodeGolem.Player
             }
         }
 
-        public int GetPlayerLevel()
+        public override void TakeDamage(float damage)
         {
-            return level;
-        }
-
-        public static MainActorStats operator +(MainActorStats lhs, MainActorStats rhs)
-        {
-            MainActorStats stats = new MainActorStats
-            {
-                Strength = lhs.Strength + rhs.Strength,
-                Constitution = lhs.Constitution + rhs.Constitution,
-                Intelligence = lhs.Intelligence + rhs.Intelligence,
-                Defense = lhs.Defense + rhs.Defense
-            };
-
-            EventManager.onStatsUpdate();
-
-            return stats;
+            Health -= damage;
         }
     }
 }
