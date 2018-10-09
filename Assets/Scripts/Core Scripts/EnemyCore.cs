@@ -1,16 +1,38 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using CodeGolem.Actor;
 namespace CodeGolem.Enemy
 {
-    struct EnemyParams
+    public struct EnemyParams
     {
-        Vector3 destination;
+        public Transform destination;
 
-        EnemyParams(Vector3 destPos)
+        EnemyParams(Transform destPos)
         {
             destination = destPos;
         }
     }
-}
+
+        /// <summary>
+        /// Enemy State Machine enum's
+        /// </summary>
+        public enum EnemyStates
+        {
+            Idle,
+            Patrol,
+            Alarm,
+            Move,
+            Attack,
+            Dead
+        }
+
+        /// <summary>
+        /// Enemy w/ State Machine base implementation.
+        /// </summary>
+        /// <param name="enemyState">Holds the enemies current state</param>
+        public abstract class EnemyBase : ActorBase
+        {
+            protected EnemyStates enemyState;
+        }
+    }

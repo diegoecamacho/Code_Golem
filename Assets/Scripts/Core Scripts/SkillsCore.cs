@@ -54,23 +54,24 @@ namespace CodeGolem.Combat
         /// Adds the skill behavior to the Actor GameObject
         /// </summary>
         /// <param name="objToAdd"></param>
-        public abstract void AddComponent(GameObject objToAdd);
+        public virtual void AddComponent(GameObject objToAdd) { }
 
         /// <summary>
         /// Register skill to specific UI element
         /// </summary>
         /// <param name="icon"></param>
-        public abstract void RegisterSkill(AbilityIcon icon);
+        public virtual void RegisterSkill(AbilityIcon icon) { }
 
         /// <summary>
         /// Use function for the skill
         /// </summary>
-        public abstract void Enable();
+        public  virtual void Enable() { }
 
 
-        public abstract void Use(SkillParam skillParam);
+        public virtual void Use(SkillParam skillParam) { }
 
 
         public abstract ISkillInterface GetBehaviour();
+
     }
 }

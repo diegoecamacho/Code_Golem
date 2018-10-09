@@ -1,4 +1,5 @@
 ﻿using CodeGolem.UI;
+using System;
 using UnityEngine;
 
 namespace CodeGolem.Combat
@@ -36,8 +37,15 @@ namespace CodeGolem.Combat
         public override void RegisterSkill(AbilityIcon icon)
         {
             abilityIcon = icon;
+
+            if (!abilityIcon)
+            {
+                throw new ArgumentNullException("Failed to Register Skill");
+            }
+
             abilityIcon.buttomImage.sprite = imageSprite;
             abilityIcon.coolDownDuration = coolDown;
+           
         }
 
         public override void Enable()

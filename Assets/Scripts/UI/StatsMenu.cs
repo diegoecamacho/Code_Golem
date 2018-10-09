@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Menus
+namespace CodeGolem.UI
 {
     public class StatsMenu : MonoBehaviour
     {

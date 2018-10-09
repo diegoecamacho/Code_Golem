@@ -19,8 +19,8 @@ namespace CodeGolem.Actor
 
         [Header("Stats")]
         [SerializeField] protected float baseDamage;
-        [SerializeField] protected int strength = 10;
 
+        [SerializeField] protected int strength = 10;
         [SerializeField] protected int constitution = 10;
         [SerializeField] protected int intelligence = 10;
         [SerializeField] protected int defense = 10;
@@ -28,6 +28,11 @@ namespace CodeGolem.Actor
         public int GetLevel()
         {
             return level;
+        }
+
+        public float GetDamage()
+        {
+            return baseDamage;
         }
 
         public abstract void TakeDamage(float damage);

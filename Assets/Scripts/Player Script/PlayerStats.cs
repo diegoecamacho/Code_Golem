@@ -1,5 +1,6 @@
 ﻿using CodeGolem.Combat;
 using CodeGolem.UI;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,11 +16,10 @@ namespace CodeGolem.Actor
         public static event StatsUIUpdater StatsUIEvent;
 
         [Header("Player Only Stats")]
-        [SerializeField] protected int dashAmount = 4;
+        [SerializeField] protected int dashAmount;
 
         [Header("Player Skills")]
         [SerializeField] private List<SkillComponent> playerSkills = new List<SkillComponent>();
-
 
         public float Health
         {
@@ -167,17 +167,33 @@ namespace CodeGolem.Actor
             }
         }
 
-        public void RegisterSkill(SkillComponent skill, AbilityIcon icon)
+        public bool RegisterSkill(SkillComponent skill, AbilityIcon icon)
         {
-            skill.RegisterSkill(icon);
-            if (playerSkills.Contains(skill))
+            if (skill == null || icon == null)
             {
-                return;
+                throw new ArgumentNullException("SkillComponent or AbilityIcon Missing!");
             }
-            if (PlayerSkills.Count < 6) // #TODO: Make Global somehow (MAX NUMBER OF SKILLS)
+
+            try
             {
-                playerSkills.Add(skill);
+                skill.RegisterSkill(icon);
+                if (playerSkills.Contains(skill))
+                {
+                    return false;
+                }
+                if (PlayerSkills.Count < 6) // #TODO: Make Global somehow (MAX NUMBER OF SKILLS)
+                {
+                    playerSkills.Add(skill);
+                }
             }
+            catch (ArgumentNullException e)
+            {
+                throw new ArgumentNullException("Failed to Register Skill!");  
+            }
+       
+
+         
+            return false;
         }
 
         public void EnableSkill(int Input, GameObject actor)

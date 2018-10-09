@@ -30,6 +30,7 @@ namespace CodeGolem.UI {
 
         void UpdateHealth(PlayerStats actorStats)
         {
+            Debug.Log("UpdateHealth");
             HealthImage.fillAmount = actorStats.Health / actorStats.TotalHealth;
             ManaImage.fillAmount = actorStats.ManaPoints / actorStats.TotalMana;
             ExperienceSlider.value = actorStats.Experience / actorStats.ExperiencetoNextLevel;

@@ -3,6 +3,7 @@ using CodeGolem.UI;
 using UnityEngine;
 using UnityEngine.AI;
 using CodeGolem.Actor;
+using System;
 
 namespace CodeGolem.Player
 {
@@ -97,15 +98,22 @@ namespace CodeGolem.Player
 
         private void Start()
         {
-            dashCooldown = timeBetweenDash;
-            ActorStats.DashAmount = 4;
-            ActorStats.RegisterSkill(Skill, abilityIcon);
+            try
+            {
+                dashCooldown = timeBetweenDash;
+                ActorStats.RegisterSkill(Skill, abilityIcon);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e.Message , this);
+            }
         }
 
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.Escape))
             {
+
                 PauseGame();
                 if (State != PlayerState.PAUSED)
                     State = PlayerState.PAUSED;
@@ -139,6 +147,7 @@ namespace CodeGolem.Player
 
                 case PlayerState.ATTACK:
                     {
+                        Debug.Log("Hello");
                         ActorStats.EnableSkill(inputCache, gameObject);
                         RaycastAttack(inputCache);
                         if (!ActorStats.PlayerSkills[0].GetBehaviour().IsActive())
@@ -168,8 +177,7 @@ namespace CodeGolem.Player
                 RaycastHit hit;
                 if (Physics.Raycast(ray, out hit))
                 {
-                    if (hit.collider.tag == "WalkableGround")
-                    {
+                 
                         SetPlayerSpeed(PlayerMovementType.WALK);
                         ClickLocation = hit.point;
                         
@@ -177,7 +185,7 @@ namespace CodeGolem.Player
 
                         Vector3 hitLocMod = new Vector3(hit.point.x, y, hit.point.z);
                         Agent.SetDestination(hitLocMod);
-                    }
+                    
                 }
             }
 
@@ -186,10 +194,9 @@ namespace CodeGolem.Player
                 RaycastHit hit;
                 if (Physics.Raycast(ray, out hit))
                 {
-                    if (hit.collider.tag == "WalkableGround")
-                    {
+                    
                         ActivateDash(hit);
-                    }
+                    
                 }
             }
         }

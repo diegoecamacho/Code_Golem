@@ -163,13 +163,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b02269b8671916458951cbc861e6699, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MouseSensitivity: 5
+  MouseSensitivity: 6
   scrollSentitivity: 2
   orbitDampening: 6
   scrollDampening: 1
   enableCamera: 0
   Ydist: 1
-  minPithAngle: 5
-  maxPitchAngle: 20
+  minPithAngle: 40
+  maxPitchAngle: 60
   MIN_CAM_DIST: 2
   MAX_CAM_DIST: 5

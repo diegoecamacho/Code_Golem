@@ -41,6 +41,7 @@ public class CameraScript : MonoBehaviour
         cameraDist = MIN_CAM_DIST;
         cameraTransform = this.transform;
         parentTransform = this.transform.parent;
+       localRotation = new Vector3(-150f, minPithAngle,0 );
     }
 
     private void LateUpdate()
