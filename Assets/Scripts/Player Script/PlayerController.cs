@@ -15,6 +15,8 @@ namespace CodeGolem.Player
 
     public class PlayerController : MonoBehaviour , IDamageable
     {
+        public static PlayerController instance;
+
         private enum PlayerState
         {
             MOVE,
@@ -98,6 +100,11 @@ namespace CodeGolem.Player
 
         private void Start()
         {
+            if (instance == null)
+            {
+                instance = this;
+            }
+
             try
             {
                 dashCooldown = timeBetweenDash;

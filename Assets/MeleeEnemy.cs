@@ -1,94 +1,76 @@
-﻿using UnityEngine;
+﻿using System;
+
+using UnityEngine;
 using UnityEngine.AI;
 using CodeGolem.Actor;
-using CodeGolem.Combat;
+using CodeGolem.Player;
+using CodeGolem.StateController;
 
 namespace CodeGolem.Enemy
 {
     [RequireComponent(typeof(NavMeshAgent))]
     public class MeleeEnemy : EnemyBase
     {
-        [Header("Entity Stats")]
-        EnemyParams inputParams;
-        NavMeshAgent agent;
+        private NavMeshAgent agent;
 
         [Header("State Variables")]
-        [SerializeField] bool onAlert;
+        [SerializeField] private bool onAlert;
 
         [Header("Weapon")]
         private float weaponRange = 1f;
 
         [Header("Debug")]
         public Transform playerTransform;
+
         public bool Move = false;
-        public EnemyStates state;
         private float deadZone;
-       
+
+        [SerializeField] private Transform[] idleWaypoints;
+        public int currIdleWaypoint = 0;
+
+        [SerializeField] private float alertRange = 10.0f;
+        private float distanceFromPlayer;
+
+        [Header("Time")]
+        [SerializeField] private float waitTime = 2f;
+
+        private float timeElapsed = 0;
+        private float timeBetweenAttacks;
+        private bool Attacking = false;
 
         // Use this for initialization
-        void Start()
+        private void Start()
         {
-            inputParams = new EnemyParams
-            {
-                destination = playerTransform
-            };
+            stateMachine = gameObject.AddComponent<StateMachine>();
             agent = GetComponent<NavMeshAgent>();
-
+            stateMachine.ChangeState(new MoveState(this, agent, idleWaypoints));
         }
 
         // Update is called once per frame
-        void Update()
-        {
+        private void Update() {
+           
+            stateMachine.ExecuteStateUpdate();
 
-            Debug.Log(Vector3.Distance(transform.position, inputParams.destination.position));
-            switch (enemyState)
+            distanceFromPlayer = Vector3.Distance(transform.position, PlayerController.instance.transform.position);
+
+            if (distanceFromPlayer < alertRange && !onAlert)
             {
-                case EnemyStates.Idle:
-                   //if (Vector3.Distance(transform.position, stateParams.destination.position) > approachRange)
-                   //{
-                      enemyState = EnemyStates.Move;
-                      agent.SetDestination(inputParams.destination.position);
-                   //}
-                    return;
-                case EnemyStates.Move:
-                    if (onAlert && Vector3.Distance(transform.position, inputParams.destination.position) < weaponRange)
-                    {
-                        Attack();
-                    }
-                    else if(Vector3.Distance(transform.position, inputParams.destination.position) < approachRange){
-                        Debug.Log("lESS THAN aPP");
-                        agent.isStopped = true;
-                        enemyState = EnemyStates.Idle;
-                    }
-                    
-                    break;
-                case EnemyStates.Attack:
-                    break;
-                case EnemyStates.Dead:
-                    break;
-                default:
-                    break;
+                stateMachine.ChangeState(new MoveState(this, agent, PlayerController.instance.transform));
+                onAlert = true;
             }
-
-        }
-
-        private void ActorMove()
-        {
-            if (transform.position == inputParams.destination.position)
+            if (!Attacking)
             {
-                return;
+                if (onAlert && distanceFromPlayer < approachRange)
+                {
+                    stateMachine.ChangeState(new AttackState(this.Attack, 2.0f));
+                    Attacking = true;
+                }
             }
-            else
-            {
-                agent.SetDestination(inputParams.destination.position);
-            }    
         }
 
         public override void Attack()
         {
-            inputParams.destination.gameObject.GetComponent<IDamageable>().TakeDamage(ActorStats.GetDamage());
-            onAlert = false;
-            enemyState = EnemyStates.Idle;
+            Debug.Log("Attack");
         }
 
         public override void TakeDamage(float damage)
@@ -99,6 +81,12 @@ namespace CodeGolem.Enemy
         public override void Interact()
         {
             throw new System.NotImplementedException();
+        }
+
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(transform.position, alertRange);
         }
     }
 }

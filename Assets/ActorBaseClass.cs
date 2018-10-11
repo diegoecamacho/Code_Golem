@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using CodeGolem.Enviroment;
+using CodeGolem.StateController;
 
 namespace CodeGolem.Actor
 {
@@ -7,7 +8,9 @@ namespace CodeGolem.Actor
     {
         [SerializeField] private ActorStats actorStats;
 
-        protected const float approachRange = 1.5F;
+        protected StateMachine stateMachine;
+
+        public static float approachRange = 1.5F;
 
         public ActorStats ActorStats
         {
