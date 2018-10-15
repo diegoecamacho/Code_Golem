@@ -1,79 +1,123 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using CodeGolem.Actor;
+using CodeGolem.Player;
+using System;
 using UnityEngine;
 using UnityEngine.AI;
-using CodeGolem.Enemy;
-using CodeGolem.Actor;
-using System;
+using Object = UnityEngine.Object;
 
 namespace CodeGolem.StateController
 {
-
-    public class MoveState : IState
+    public enum MovementType
     {
-        ActorBase actor;
-        NavMeshAgent navMeshAgentComp;
+        Civilian,
+        Enemy
+    }
 
-        Transform MoveWaypoint = null;
-        Transform[] IdleWaypoints = null;
+    public class MoveState<T> : IState where T : ActorStats
+    {
+        private readonly T _actorStats;
 
-        int currWaypoint = 0;
-        bool multipleWaypoints = false;
+        private readonly Transform _actor;
 
-       public MoveState(ActorBase actortoMove, NavMeshAgent actorNavmesh, Transform[] wayPoints)
+        private readonly Action<MovementReturn> _movementCallBack;
+
+        private readonly MovementType _movement;
+
+        private readonly Transform[] _idleWaypoints;
+
+        private readonly bool _multipleWaypoints;
+
+        private readonly NavMeshAgent _agent;
+
+        private int _curWaypoint;
+
+        public bool OnAlert;
+
+        public MoveState(Object actorStats, Transform actor, NavMeshAgent agent, Transform[] idleWaypoints, Action<MovementReturn> movementCallBack, MovementType movement)
         {
-            actor = actortoMove;
-            navMeshAgentComp = actorNavmesh;
-            IdleWaypoints = wayPoints;
-        }
+            _actorStats = actorStats as T;
+            Debug.Assert(_actorStats != null, "ActorStats Missing");
 
-        public MoveState(ActorBase actortoMove, NavMeshAgent actorNavmesh, Transform wayPoint)
-        {
-            actor = actortoMove;
-            navMeshAgentComp = actorNavmesh;
-            MoveWaypoint = wayPoint;
+            _actor = actor;
+            _agent = agent;
+            _movementCallBack = movementCallBack;
+            _movement = movement;
+            _idleWaypoints = idleWaypoints;
+
+            if (_idleWaypoints.Length != 0)
+            {
+                _multipleWaypoints = true;
+            }
         }
 
         public void Enter()
         {
-            navMeshAgentComp.isStopped = false;
-            if (MoveWaypoint != null)
-            {
-                navMeshAgentComp.SetDestination(MoveWaypoint.position);
-            }
-            else
-            {
-                if (IdleWaypoints != null)
-                {
-                    navMeshAgentComp.SetDestination(IdleWaypoints[currWaypoint].position);
-                    multipleWaypoints = true;
-                }
-                else
-                {
-                    throw new ArgumentNullException("Missing Waypoints in Move State");
-                }
-            }
+            _agent.isStopped = false;
+            if (!_multipleWaypoints) return;
+            var movementReturn = new MovementReturn(_idleWaypoints[_curWaypoint]);
+            _movementCallBack(movementReturn);
         }
 
         public void Execute()
         {
-            if (multipleWaypoints)
+            Debug.Log("Move State");
+            if (_movement == MovementType.Enemy)
             {
-                if (Vector3.Distance(actor.transform.position, IdleWaypoints[currWaypoint].position) < ActorBase.approachRange)
+                var stats = _actorStats as EnemyStats;
+                Debug.Assert(stats != null, "Cast to EnemyStats Failed!");
+                if (Vector3.Distance(_actor.transform.position, PlayerController.PlayerLocation.position) < stats.SearchRadius)
                 {
-                    currWaypoint++;
-                    currWaypoint = currWaypoint >= IdleWaypoints.Length ? 0 : currWaypoint;
-                    navMeshAgentComp.SetDestination(IdleWaypoints[currWaypoint].position);
+                    Debug.Log("Move To PLayer");
+                    var movementReturn = new MovementReturn(PlayerController.PlayerLocation);
+
+                    OnAlert = true;
+                    _movementCallBack(movementReturn);
+                    return;
                 }
+                OnAlert = false;
             }
+
+            MovementReturn movement = null;
+            if (_multipleWaypoints)
+            {
+                movement = SendNextWaypoint();
+            }
+            else
+            {
+                Debug.Log("Still To PLayer");
+                movement = new MovementReturn(_actor.transform);
+            }
+
+            _movementCallBack(movement);
+        }
+
+        private MovementReturn SendNextWaypoint()
+        {
+            if (Vector3.Distance(_actor.transform.position, _idleWaypoints[_curWaypoint].position) <
+                _actorStats.ApproachDistance)
+            {
+                _curWaypoint++;
+                _curWaypoint = _curWaypoint >= _idleWaypoints.Length ? 0 : _curWaypoint;
+            }
+
+            var movementReturn = new MovementReturn(_idleWaypoints[_curWaypoint]);
+            return movementReturn;
         }
 
         public void Exit()
         {
-            navMeshAgentComp.isStopped = true;
-            return;
+            _agent.isStopped = true;
+            OnAlert = false;
         }
     }
 
+    public class MovementReturn
+    {
+        public MovementReturn(Transform nextTransform)
+        {
+            NextTransform = nextTransform;
+        }
 
+        public Transform NextTransform { get; private set; }
+    }
 }

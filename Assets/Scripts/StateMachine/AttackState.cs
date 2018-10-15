@@ -1,39 +1,54 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
-using CodeGolem.StateController;
 
-public class AttackState : IState
+namespace CodeGolem.StateController
 {
-    float timeElapsed = 0;
-    float attackTime;
-
-    private System.Action attackCallBack;
-
-    public AttackState(System.Action AttackCall, float timeBetweenAttack)
+    public class AttackState : IState
     {
-        this.attackCallBack = AttackCall;
-        attackTime = timeBetweenAttack;
-    }
+        private float _timeElapsed = 0;
 
-    public void Enter()
-    {
-        return;
-    }
+        private readonly float _attackTime;
+        private readonly Action _attackCallBack;
+        private readonly Action _animationAction;
 
-    public void Execute()
-    {
-        timeElapsed += Time.deltaTime;
-        Debug.Log(timeElapsed);
-        if (timeElapsed >= attackTime)
+        private bool _animActive;
+
+        public AttackState(Action attackCall, Action animationAction, float timeBetweenAttack)
         {
-            this.attackCallBack();
-            timeElapsed = 0;
+            this._attackCallBack = attackCall;
+            _attackTime = timeBetweenAttack;
+            _animationAction = animationAction;
         }
-    }
 
-    public void Exit()
-    {
-        return;
+        public void Enter()
+        {
+
+        }
+
+        public void Execute()
+        {
+            Debug.Log("Attack State");
+            _timeElapsed += Time.deltaTime;
+
+            if (_timeElapsed >= _attackTime /2  && !_animActive)
+            {
+                Debug.Log("AttackAnim");
+                _animationAction();
+                _animActive = true;
+            }
+
+            if (_timeElapsed >= _attackTime)
+            {
+                _attackCallBack();
+                _timeElapsed = 0;
+                _animActive = false;
+            }
+
+            
+        }
+
+        public void Exit()
+        {
+        }
     }
 }

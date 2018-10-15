@@ -47,18 +47,18 @@ namespace CodeGolem.Enemy
         private void OnCollisionEnter(Collision collision)
         {
             Debug.Log("Collision");
-            if (collision.transform.tag == "Bullet")
+            if (collision.transform.CompareTag("Bullet"))
             {
-                Player.ActorStats.Experience++;
-                Destroy(gameObject , timeToExplode);
+                this.Player.ActorStats.Experience++;
+                Destroy(this.gameObject , this.timeToExplode);
             }
 
-            if (collision.transform.tag == "Player")
+            if (collision.transform.CompareTag("Player"))
             {
                 Debug.Log("Player Hit");
                 collision.gameObject.GetComponent<IDamageable>().TakeDamage(damage);
 
-                Destroy(gameObject);
+                Destroy(this.gameObject);
 
             }
         }

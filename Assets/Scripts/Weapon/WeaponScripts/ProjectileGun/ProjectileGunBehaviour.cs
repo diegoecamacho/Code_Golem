@@ -15,9 +15,6 @@ namespace CodeGolem.Combat
 
         SkillParam skillParam;
 
-
-        
-
         // Update is called once per frame
         private void Update()
         {
@@ -32,17 +29,15 @@ namespace CodeGolem.Combat
             }
         }
 
-        void FixedUpdate()
+        private void FixedUpdate()
         {
-            if (useSkill && skillActive)
-            {
-                Rigidbody bulClone = Instantiate(projectileGun.bulletPrefab, skillParam.Actor.SpawnPoint.position , Quaternion.identity, null).GetComponent<Rigidbody>();
-                Vector3 BulDir = skillParam.target - skillParam.Actor.transform.position;
-                bulClone.AddForce(BulDir * projectileGun.m_projectileSpeed * Time.deltaTime, ForceMode.Impulse);
+            if (!useSkill || !skillActive) return;
+            var bulClone = Instantiate(projectileGun.bulletPrefab, skillParam.Actor.SpawnPoint.position , Quaternion.identity, null).GetComponent<Rigidbody>();
+            var bulDir = skillParam.target - skillParam.Actor.transform.position;
+            bulClone.AddForce(bulDir * projectileGun.m_projectileSpeed * Time.deltaTime, ForceMode.Impulse);
 
-                Destroy(bulClone.gameObject, 5.0f);
-                useSkill = false;
-            }
+            Destroy(bulClone.gameObject, 5.0f);
+            useSkill = false;
         }
 
         private void SkillCooldown()

@@ -1,29 +1,15 @@
 ﻿using UnityEngine;
 using CodeGolem.Enviroment;
 using CodeGolem.StateController;
+using UnityEngine.Serialization;
 
 namespace CodeGolem.Actor
 {
-    public abstract class ActorBase : MonoBehaviour, IDamageable, IInteract
+    public abstract class ActorBase<T> : MonoBehaviour, IDamageable, IInteract where T : ActorStats
     {
-        [SerializeField] private ActorStats actorStats;
+        protected StateMachine StateMachine;
 
-        protected StateMachine stateMachine;
-
-        public static float approachRange = 1.5F;
-
-        public ActorStats ActorStats
-        {
-            get
-            {
-                return actorStats;
-            }
-
-            set
-            {
-                actorStats = value;
-            }
-        }
+        [SerializeField] protected T ActorStats;
 
         public abstract void Attack();
 

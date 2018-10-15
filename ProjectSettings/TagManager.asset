@@ -18,9 +18,9 @@ TagManager:
   - PostProcessing
   - Player
   - Bullet
-  - 
-  - 
-  - 
+  - Enemies
+  - Enviroment
+  - NavMesh
   - 
   - 
   - 

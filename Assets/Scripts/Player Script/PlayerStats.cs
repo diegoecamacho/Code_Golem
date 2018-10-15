@@ -3,17 +3,19 @@ using CodeGolem.UI;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions;
+using Debug = System.Diagnostics.Debug;
 
 namespace CodeGolem.Actor
 {
     [CreateAssetMenu(fileName = "PlayerStatsTemplate", menuName = "Character/Stats", order = 1)]
     public class PlayerStats : ActorStats
     {
-        public delegate void VitalUIUpdater(PlayerStats actor);
-        public static event VitalUIUpdater VitalUISEvent;
+        public delegate void VitalUiUpdater(PlayerStats actor);
+        public static event VitalUiUpdater VitalUiEvent;
 
-        public delegate void StatsUIUpdater(PlayerStats actor);
-        public static event StatsUIUpdater StatsUIEvent;
+        public delegate void StatsUiUpdater(PlayerStats actor);
+        public static event StatsUiUpdater StatsUiEvent;
 
         [Header("Player Only Stats")]
         [SerializeField] protected int dashAmount;
@@ -21,44 +23,47 @@ namespace CodeGolem.Actor
         [Header("Player Skills")]
         [SerializeField] private List<SkillComponent> playerSkills = new List<SkillComponent>();
 
-        public float Health
+        public new float Health
         {
             get
             {
-                return health;
+                return base.Health;
             }
 
             set
             {
-                health = value;
-                VitalUISEvent(this);
+                base.Health = value;
+                Debug.Assert(VitalUiEvent != null, "VitalUiEvent != null");
+                VitalUiEvent(this);
             }
         }
 
-        public float ManaPoints
+        public new float ManaPoints
         {
             get
             {
-                return manaPoints;
+                return base.ManaPoints;
             }
 
             set
             {
-                manaPoints = value;
-                VitalUISEvent(this);
+                base.ManaPoints = value;
+                Debug.Assert(VitalUiEvent != null, "VitalUiEvent != null");
+                VitalUiEvent(this);
             }
         }
 
-        public float Experience
+        public new float Experience
         {
             get
             {
-                return experience;
+                return base.Experience;
             }
             set
             {
-                experience = value;
-                VitalUISEvent(this);
+                base.Experience = value;
+                Debug.Assert(VitalUiEvent != null, "VitalUiEvent != null");
+                VitalUiEvent(this);
             }
         }
 
@@ -72,32 +77,17 @@ namespace CodeGolem.Actor
             set
             {
                 dashAmount = value;
-                VitalUISEvent(this);
+                Debug.Assert(VitalUiEvent != null, "VitalUiEvent != null");
+                VitalUiEvent(this);
             }
         }
 
-        public float TotalHealth
+        public new int Strength
         {
-            get
-            {
-                return totalHealth;
-            }
-        }
-
-        public float TotalMana
-        {
-            get
-            {
-                return totalMana;
-            }
-        }
-
-        public int Strength
-        {
-            get { return strength; }
+            get { return base.Strength; }
             set
             {
-                strength = value;
+                base.Strength = value;
                 if (EventManager.onStatsUpdate != null)
                 {
                     EventManager.onStatsUpdate();
@@ -105,13 +95,13 @@ namespace CodeGolem.Actor
             }
         }
 
-        public int Constitution
+        public new int Constitution
         {
-            get { return constitution; }
+            get { return base.Constitution; }
 
             set
             {
-                constitution = value;
+                base.Constitution = value;
                 if (EventManager.onStatsUpdate != null)
                 {
                     EventManager.onStatsUpdate();
@@ -119,13 +109,13 @@ namespace CodeGolem.Actor
             }
         }
 
-        public int Intelligence
+        public new int Intelligence
         {
-            get { return intelligence; }
+            get { return base.Intelligence; }
 
             set
             {
-                intelligence = value;
+                base.Intelligence = value;
                 if (EventManager.onStatsUpdate != null)
                 {
                     EventManager.onStatsUpdate();
@@ -133,12 +123,12 @@ namespace CodeGolem.Actor
             }
         }
 
-        public int Defense
+        public new int Defense
         {
-            get { return defense; }
+            get { return base.Defense; }
             set
             {
-                defense = value;
+                base.Defense = value;
                 if (EventManager.onStatsUpdate != null)
                 {
                     EventManager.onStatsUpdate();
@@ -151,19 +141,6 @@ namespace CodeGolem.Actor
             get
             {
                 return playerSkills;
-            }
-        }
-
-        public float ExperiencetoNextLevel
-        {
-            get
-            {
-                return experienceToNextLevel;
-
-            }
-            set
-            {
-                experienceToNextLevel = value;
             }
         }
 

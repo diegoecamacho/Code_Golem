@@ -1,9 +1,11 @@
-﻿using CodeGolem.Combat;
+﻿using CodeGolem.Actor;
+using CodeGolem.Combat;
 using CodeGolem.UI;
+using System;
+using CodeGolem.Managers;
 using UnityEngine;
 using UnityEngine.AI;
-using CodeGolem.Actor;
-using System;
+using UnityEngine.Serialization;
 
 namespace CodeGolem.Player
 {
@@ -13,27 +15,29 @@ namespace CodeGolem.Player
         DASH
     }
 
-    public class PlayerController : MonoBehaviour , IDamageable
+    public class PlayerController : MonoBehaviour, IDamageable
     {
         public static PlayerController instance;
 
+        public static Transform PlayerLocation;
+
         private enum PlayerState
         {
-            MOVE,
-            ATTACK,
-            PAUSED
+            Move,
+            Attack,
+            Paused
         }
 
-        private PlayerState State = PlayerState.MOVE;
+        private PlayerState _state = PlayerState.Move;
 
         [Header("Character Class")]
-        [SerializeField] private PlayerStats actorStats;
+        [SerializeField] private PlayerStats _actorStats;
 
         public PlayerStats ActorStats
         {
             get
             {
-                return actorStats;
+                return _actorStats;
             }
         }
 
@@ -54,9 +58,9 @@ namespace CodeGolem.Player
         }
 
         [Header("Player Movement")]
-        [SerializeField] private float baseMovementSpeed;
+        [SerializeField] private float _baseMovementSpeed;
 
-        [SerializeField] private float baseAcceleration;
+        [SerializeField] private float _baseAcceleration;
 
         [Header("Dash")]
         [SerializeField] private float dashMovementSpeed;
@@ -72,7 +76,6 @@ namespace CodeGolem.Player
         //#TODO: Implement weapon selection system
 
         [Header("Navigation Mesh Agent")]
-        //public NavMeshAgent Agent;
         public NavMeshAgent Agent;
 
         [Header("InputManager")]
@@ -92,7 +95,8 @@ namespace CodeGolem.Player
         public SkillComponent Skill;
 
         [Range(0, 100)]
-       public float DebugHealth = 100;
+        public float DebugHealth = 100;
+
         [Range(0, 100)]
         public float DebugMana = 100;
 
@@ -105,6 +109,11 @@ namespace CodeGolem.Player
                 instance = this;
             }
 
+            if (PlayerLocation == null)
+            {
+                PlayerLocation = transform;
+            }
+
             try
             {
                 dashCooldown = timeBetweenDash;
@@ -112,7 +121,7 @@ namespace CodeGolem.Player
             }
             catch (Exception e)
             {
-                Debug.LogError(e.Message , this);
+                Debug.LogError(e.Message, this);
             }
         }
 
@@ -120,18 +129,17 @@ namespace CodeGolem.Player
         {
             if (Input.GetKeyDown(KeyCode.Escape))
             {
-
                 PauseGame();
-                if (State != PlayerState.PAUSED)
-                    State = PlayerState.PAUSED;
+                if (_state != PlayerState.Paused)
+                    _state = PlayerState.Paused;
                 else
-                    State = PlayerState.MOVE;
+                    _state = PlayerState.Move;
             }
 
             if (dashonCooldown)
             {
                 dashCooldown -= Time.deltaTime;
-                Debug.Log(dashCooldown);
+
                 if (dashCooldown <= 0)
                 {
                     dashonCooldown = false;
@@ -139,27 +147,27 @@ namespace CodeGolem.Player
                 }
             }
 
-            switch (State)
+            switch (_state)
             {
-                case PlayerState.MOVE:
+                case PlayerState.Move:
                     {
                         PlayerMove();
                         inputCache = PlayerAttackInput();
                         if (inputCache != -1)
                         {
-                            State = PlayerState.ATTACK;
+                            _state = PlayerState.Attack;
                         }
                     }
                     break;
 
-                case PlayerState.ATTACK:
+                case PlayerState.Attack:
                     {
                         Debug.Log("Hello");
                         ActorStats.EnableSkill(inputCache, gameObject);
                         RaycastAttack(inputCache);
                         if (!ActorStats.PlayerSkills[0].GetBehaviour().IsActive())
                         {
-                            State = PlayerState.MOVE;
+                            _state = PlayerState.Move;
                             if (pointer != null)
                             {
                                 Destroy(pointer);
@@ -168,7 +176,7 @@ namespace CodeGolem.Player
                     }
                     break;
 
-                case PlayerState.PAUSED:
+                case PlayerState.Paused:
                     break;
 
                 default:
@@ -184,15 +192,13 @@ namespace CodeGolem.Player
                 RaycastHit hit;
                 if (Physics.Raycast(ray, out hit))
                 {
-                 
-                        SetPlayerSpeed(PlayerMovementType.WALK);
-                        ClickLocation = hit.point;
-                        
-                        float y = hit.collider.transform.position.y + 1;
+                    SetPlayerSpeed(PlayerMovementType.WALK);
+                    ClickLocation = hit.point;
 
-                        Vector3 hitLocMod = new Vector3(hit.point.x, y, hit.point.z);
-                        Agent.SetDestination(hitLocMod);
-                    
+                    float y = hit.collider.transform.position.y + 1;
+
+                    Vector3 hitLocMod = new Vector3(hit.point.x, y, hit.point.z);
+                    Agent.SetDestination(hitLocMod);
                 }
             }
 
@@ -201,19 +207,17 @@ namespace CodeGolem.Player
                 RaycastHit hit;
                 if (Physics.Raycast(ray, out hit))
                 {
-                    
-                        ActivateDash(hit);
-                    
+                    ActivateDash(hit);
                 }
             }
         }
 
         private void ActivateDash(RaycastHit hit)
         {
-            if (!dashonCooldown && actorStats.DashAmount > 0)
+            if (!dashonCooldown && _actorStats.DashAmount > 0)
             {
                 SetPlayerSpeed(PlayerMovementType.DASH);
-                actorStats.DashAmount--;
+                _actorStats.DashAmount--;
                 dashonCooldown = true;
 
                 Vector3 dir = hit.point - transform.position;
@@ -221,7 +225,6 @@ namespace CodeGolem.Player
                 Agent.transform.position = DashPoint;
                 Agent.SetDestination(Agent.transform.position);
                 ClickLocation = DashPoint;
-              
             }
         }
 
@@ -235,8 +238,8 @@ namespace CodeGolem.Player
             {
                 case PlayerMovementType.WALK:
                     {
-                        Agent.speed = baseMovementSpeed;
-                        Agent.acceleration = baseAcceleration;
+                        Agent.speed = _baseMovementSpeed;
+                        Agent.acceleration = _baseAcceleration;
                     }
                     break;
 
@@ -255,23 +258,16 @@ namespace CodeGolem.Player
         /// <param name="input"></param>
         private void RaycastAttack(int input)
         {
-            if (pointer == null)
-            {
-                pointer = Instantiate(Resources.Load("MousePointer")) as GameObject;
-            }
-
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+   
             RaycastHit hit;
+            RaycastManager.Instance.RayHit(out hit);
 
-            if (Physics.Raycast(ray, out hit))
+            if (Input.GetButtonDown("PlayerActive"))
             {
-                pointer.transform.position = new Vector3(hit.point.x, hit.point.y + 0.02f, hit.point.z);
-                if (Input.GetButtonDown("PlayerActive"))
-                {
-                    SkillParam skillParam = new SkillParam(this, new Vector3(hit.point.x, transform.position.y, hit.point.z));
-                    ActorStats.UseSkill(input, skillParam);
-                }
+                SkillParam skillParam = new SkillParam(this, new Vector3(hit.point.x, transform.position.y, hit.point.z));
+                ActorStats.UseSkill(input, skillParam);
             }
+            
 
             if (ActorStats.PlayerSkills[input].allowMovement)
                 PlayerMove();
@@ -324,9 +320,9 @@ namespace CodeGolem.Player
 
         public void TakeDamage(float damage)
         {
-            Debug.Log("Damage Taken");
-            ActorStats.Health = actorStats.Health - damage;
-            Debug.Log(actorStats.Health);
+            
+            ActorStats.Health -= damage;
+            
         }
 
         public void Attack()
@@ -334,6 +330,4 @@ namespace CodeGolem.Player
             throw new System.NotImplementedException();
         }
     }
-
-    
 }

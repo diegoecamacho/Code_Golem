@@ -11,16 +11,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccad49873b3bffb4e9a85b5b42dc3ebb, type: 3}
   m_Name: PlayerStats
   m_EditorClassIdentifier: 
-  level: 1
-  health: 100
-  manaPoints: 100
-  experience: 5
-  experienceToNextLevel: 10
-  baseDamage: 0
-  strength: 10
-  constitution: 10
-  intelligence: 10
-  defense: 10
-  dashAmount: 2
+  Level: 1
+  Health: 60
+  ManaPoints: 100
+  Experience: 0
+  ExperienceToNextLevel: 0
+  TotalHealth: 100
+  TotalMana: 100
+  BaseDamage: 0
+  MovementSpeed: 0
+  ApproachDistance: 0
+  Strength: 10
+  Constitution: 10
+  Intelligence: 10
+  Defense: 10
+  dashAmount: 4
   playerSkills:
   - {fileID: 11400000, guid: ebe510ea9c749404889faad2fd59416c, type: 2}

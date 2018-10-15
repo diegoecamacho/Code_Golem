@@ -32,12 +32,9 @@ namespace CodeGolem.StateController
 
         public void ReturnToPreviousState()
         {
-            //if (this.previousState != null)
-            //{
                 this.currentState.Exit();
                 this.currentState = this.previousState;
                 this.currentState.Enter();
-            //}
         }
 	}
 }

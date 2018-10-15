@@ -1,92 +1,120 @@
-﻿using System;
-
-using UnityEngine;
-using UnityEngine.AI;
-using CodeGolem.Actor;
-using CodeGolem.Player;
-using CodeGolem.StateController;
+﻿using CodeGolem.Actor;
 
 namespace CodeGolem.Enemy
 {
+    using CodeGolem.Player;
+    using CodeGolem.StateController;
+    using System;
+    using UnityEngine;
+    using UnityEngine.AI;
+
+    /// <inheritdoc />
+    /// <summary>
+    /// The melee enemy.
+    /// </summary>
     [RequireComponent(typeof(NavMeshAgent))]
-    public class MeleeEnemy : EnemyBase
+    public class MeleeEnemy : ActorBase<EnemyStats>
     {
-        private NavMeshAgent agent;
+        private PlayerController _player;
+        private Animator _animator;
+        private NavMeshAgent _agent;
 
-        [Header("State Variables")]
-        [SerializeField] private bool onAlert;
+        [Header("Idle Waypoints")]
+        [SerializeField] private Transform[] _idleWaypoints;
 
-        [Header("Weapon")]
-        private float weaponRange = 1f;
-
-        [Header("Debug")]
-        public Transform playerTransform;
-
-        public bool Move = false;
-        private float deadZone;
-
-        [SerializeField] private Transform[] idleWaypoints;
-        public int currIdleWaypoint = 0;
-
-        [SerializeField] private float alertRange = 10.0f;
-        private float distanceFromPlayer;
-
-        [Header("Time")]
-        [SerializeField] private float waitTime = 2f;
-
-        private float timeElapsed = 0;
-        private float timeBetweenAttacks;
-        private bool Attacking = false;
-
-        // Use this for initialization
-        private void Start()
+        public override void Interact()
         {
-            stateMachine = gameObject.AddComponent<StateMachine>();
-            agent = GetComponent<NavMeshAgent>();
-            stateMachine.ChangeState(new MoveState(this, agent, idleWaypoints));
-        }
-
-        // Update is called once per frame
-        private void Update() {
-           
-            stateMachine.ExecuteStateUpdate();
-
-            distanceFromPlayer = Vector3.Distance(transform.position, PlayerController.instance.transform.position);
-
-            if (distanceFromPlayer < alertRange && !onAlert)
-            {
-                stateMachine.ChangeState(new MoveState(this, agent, PlayerController.instance.transform));
-                onAlert = true;
-            }
-            if (!Attacking)
-            {
-                if (onAlert && distanceFromPlayer < approachRange)
-                {
-                    stateMachine.ChangeState(new AttackState(this.Attack, 2.0f));
-                    Attacking = true;
-                }
-            }
-        }
-
-        public override void Attack()
-        {
-            Debug.Log("Attack");
+            throw new NotImplementedException();
         }
 
         public override void TakeDamage(float damage)
         {
-            throw new System.NotImplementedException();
+            this.ActorStats.Health -= damage;
+            if (ActorStats.Health <= 0)
+            {
+                Destroy(this.gameObject);
+            }
         }
 
-        public override void Interact()
+        // Use this for initialization
+        private void Start()
         {
-            throw new System.NotImplementedException();
+            //Initialization
+            _player = FindObjectOfType<PlayerController>();
+            _animator = GetComponent<Animator>();
+            _agent = this.GetComponent<NavMeshAgent>();
+
+            Debug.Assert(ActorStats != null, "Enemy Stats is Null!");
+            Debug.Assert(_player != null, "player != null");
+            Debug.Assert(_agent != null, "_agent != null");
+
+            //Assignment
+            _agent.speed = ActorStats.PatrolSpeed;
+
+            StateMachine = this.gameObject.AddComponent<StateMachine>();
+            StateMachine.ChangeState(new MoveState<EnemyStats>(this.ActorStats, this.transform, _agent, _idleWaypoints, this.MovePlayer, MovementType.Enemy));
+        }
+
+        // Update is called once per frame
+        private void Update()
+        {
+            StateMachine.ExecuteStateUpdate();
+
+            if (_animator == null) return;
+
+            if (_agent.velocity.magnitude > 0)
+            {
+                _animator.SetBool("Move", true);
+                _animator.SetFloat("Speed", _agent.velocity.magnitude);
+                return;
+            }
+            _animator.SetBool("Move", false);
+        }
+
+        private void MovePlayer(MovementReturn movementReturn)
+        {
+            var moveState = StateMachine.currentState as MoveState<EnemyStats>;
+
+            if (moveState == null || movementReturn == null) return;
+
+            if (transform.position == movementReturn.NextTransform.position) return;
+
+            _agent.speed = moveState.OnAlert ? ActorStats.AlertSpeed : ActorStats.PatrolSpeed;
+
+            if (Vector3.Distance(transform.position, _player.transform.position) <=
+                 ActorStats.ApproachDistance)
+            {
+                StateMachine.ChangeState(new AttackState(Attack, AttackAnim, ActorStats.TimeBetweenAttacks));
+                return;
+            }
+
+            Debug.Log("Move PLLayer");
+            _agent.SetDestination(movementReturn.NextTransform.position);
+        }
+
+        public void AttackAnim()
+        {
+            _animator.SetBool("Attack", true);
+        }
+
+        public override void Attack()
+        {
+            _animator.SetBool("Attack", false);
+            if (Vector3.Distance(transform.position, _player.transform.position) >=
+                ActorStats.ApproachDistance)
+            {
+                Debug.Log("State Change");
+                StateMachine.ReturnToPreviousState();
+                return;
+            }
+
+            PlayerController.instance.TakeDamage(ActorStats.BaseDamage);
         }
 
         private void OnDrawGizmos()
         {
             Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(transform.position, alertRange);
+            Gizmos.DrawWireSphere(this.transform.position, this.ActorStats.SearchRadius);
         }
     }
 }

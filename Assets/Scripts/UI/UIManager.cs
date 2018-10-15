@@ -20,32 +20,18 @@ namespace CodeGolem.UI {
 
         private void Start()
         {
-            PlayerStats.VitalUISEvent += UpdateHealth;
+            PlayerStats.VitalUiEvent += UpdateHealth;
         }
 
-        private void Update()
-        {
-           
-        }
-
-        void UpdateHealth(PlayerStats actorStats)
+        private void UpdateHealth(PlayerStats actorStats)
         {
             Debug.Log("UpdateHealth");
             HealthImage.fillAmount = actorStats.Health / actorStats.TotalHealth;
             ManaImage.fillAmount = actorStats.ManaPoints / actorStats.TotalMana;
-            ExperienceSlider.value = actorStats.Experience / actorStats.ExperiencetoNextLevel;
-            for (int i = 0; i < DashImages.Length; i++)
+            ExperienceSlider.value = actorStats.Experience / actorStats.ExperienceToNextLevel;
+            for (var i = 0; i < DashImages.Length; i++)
             {
-                if (i >= actorStats.DashAmount)
-                {
-                    DashImages[i].enabled = false;
-                    
-
-                }
-                else
-                {
-                    DashImages[i].enabled = true;
-                }
+                DashImages[i].enabled = i < actorStats.DashAmount;
             }
         }
 
