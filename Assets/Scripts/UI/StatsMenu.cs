@@ -1,4 +1,5 @@
-﻿using CodeGolem.Player;
+﻿using CodeGolem.Level;
+using CodeGolem.Player;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -25,11 +26,13 @@ namespace CodeGolem.UI
 
         private void UpdateUI()
         {
-            m_LevelStatsText.text = focusCharacter.ActorStats.GetLevel().ToString();
-            m_StrengthText.text = focusCharacter.ActorStats.Strength.ToString();
-            m_IntelligenceText.text = focusCharacter.ActorStats.Intelligence.ToString();
-            m_ConstitutionText.text = focusCharacter.ActorStats.Constitution.ToString();
-            m_DefenseText.text = focusCharacter.ActorStats.Defense.ToString();
+            var playerStats = LevelManager.Player;
+
+            m_LevelStatsText.text = playerStats.GetStats().GetLevel().ToString();
+            m_StrengthText.text = playerStats.GetStats().Strength.ToString();
+            m_IntelligenceText.text = playerStats.GetStats().Intelligence.ToString();
+            m_ConstitutionText.text = playerStats.GetStats().Constitution.ToString();
+            m_DefenseText.text = playerStats.GetStats().Defense.ToString();
         }
     }
 }

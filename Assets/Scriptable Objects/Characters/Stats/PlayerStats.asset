@@ -12,19 +12,22 @@ MonoBehaviour:
   m_Name: PlayerStats
   m_EditorClassIdentifier: 
   Level: 1
-  Health: 60
+  Health: -310
   ManaPoints: 100
   Experience: 0
   ExperienceToNextLevel: 0
   TotalHealth: 100
   TotalMana: 100
   BaseDamage: 0
-  MovementSpeed: 0
   ApproachDistance: 0
   Strength: 10
   Constitution: 10
   Intelligence: 10
   Defense: 10
-  dashAmount: 4
+  PlayerMovementSpeed: 0
+  PlayerAcceleration: 0
+  dashAmount: -65
+  TimeBetweenDash: 0
+  DashDistance: 1
   playerSkills:
   - {fileID: 11400000, guid: ebe510ea9c749404889faad2fd59416c, type: 2}

@@ -2,24 +2,28 @@
 
 namespace CodeGolem.Managers
 {
+    /// <summary>
+    /// Singleton Class Creates a singleton out of the template type.
+    /// </summary>
+    /// <typeparam name="T">Singleton Class</typeparam>
     public class Singleton<T> : MonoBehaviour where T: Component
     {
-        private static T _instance;
+        private static T instance;
         public static T Instance
         {
             get
             {
-                if (_instance != null) return _instance;
+                if (instance != null) return instance;
 
-                _instance = FindObjectOfType<T>();
-                if (_instance != null) return _instance;
+                instance = FindObjectOfType<T>();
+                if (instance != null) return instance;
 
                 var obj = new GameObject("Raycast Manager");
-                _instance = obj.AddComponent<T>();
-                return _instance;
+                instance = obj.AddComponent<T>();
+                return instance;
 
             }
-            set { _instance = value; }
+            set { instance = value; }
         }
     }
 }

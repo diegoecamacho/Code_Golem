@@ -9,7 +9,13 @@ namespace CodeGolem.Actor
     {
         protected StateMachine StateMachine;
 
+        [Header("Character Stats")]
         [SerializeField] protected T ActorStats;
+
+        public T GetStats() 
+        {
+            return ActorStats;
+        }
 
         public abstract void Attack();
 

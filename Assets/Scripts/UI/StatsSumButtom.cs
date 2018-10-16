@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using CodeGolem.Level;
+using UnityEngine;
 
 namespace CodeGolem.UI
 {
@@ -19,19 +20,19 @@ namespace CodeGolem.UI
             switch (SumStat)
             {
                case StatsType.STRENGTH:
-                   StatsMenu.focusCharacter.ActorStats.Strength++;
+                   LevelManager.Player.GetStats().Strength++;
                    break;
               
                case StatsType.CONSTITUTION:
-                   StatsMenu.focusCharacter.ActorStats.Constitution++;
+                   LevelManager.Player.GetStats().Constitution++;
                    break;
               
                case StatsType.INTELLIGENCE:
-                   StatsMenu.focusCharacter.ActorStats.Intelligence++;
+                   LevelManager.Player.GetStats().Intelligence++;
                    break;
               
                case StatsType.DEFENSE:
-                   StatsMenu.focusCharacter.ActorStats.Defense++;
+                   LevelManager.Player.GetStats().Defense++;
                    break;
               
                default:

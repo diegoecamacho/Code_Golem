@@ -1,41 +1,63 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using CodeGolem.Actor;
+using CodeGolem.Managers;
 using UnityEngine;
 using UnityEngine.UI;
-using CodeGolem.Actor;
 
-namespace CodeGolem.UI {
-    public class UIManager : MonoBehaviour {
-
+namespace CodeGolem.UI
+{
+    /// <summary>
+    /// UI Manager Controls All UI Components
+    /// </summary>
+    public class UIManager : Singleton<UIManager>
+    {
         [Header("Image Components")]
-        [SerializeField] Image HealthImage;
-        [SerializeField] Image ManaImage;
-        [SerializeField] Image[] DashImages;
+        [SerializeField] private Image healthImage;
 
-        [SerializeField] AbilityIcon[] abilityIcons;
+        [SerializeField] private Image manaImage;
+        [SerializeField] private Image[] dashImages;
 
-        [SerializeField] Slider ExperienceSlider;
+        [SerializeField] private AbilityIcon[] abilityIcons;
 
+        [SerializeField] private Slider experienceSlider;
 
+        [SerializeField] private GameObject pauseMenu;
+
+        public bool ActiveUI = false;
 
         private void Start()
         {
+            Debug.Assert(pauseMenu != null, "Missing Pause Menu");
+
             PlayerStats.VitalUiEvent += UpdateHealth;
+        }
+
+        private void Update()
+        {
+            if (Input.GetButtonDown("Menu/Esc"))
+            {
+                EnableMenu();
+            }
+        }
+
+        /// <summary>
+        /// Enable/Disable Menu UI
+        /// </summary>
+        public void EnableMenu()
+        {
+            pauseMenu.SetActive(!pauseMenu.activeSelf);
+            ActiveUI = pauseMenu.activeSelf;
         }
 
         private void UpdateHealth(PlayerStats actorStats)
         {
             Debug.Log("UpdateHealth");
-            HealthImage.fillAmount = actorStats.Health / actorStats.TotalHealth;
-            ManaImage.fillAmount = actorStats.ManaPoints / actorStats.TotalMana;
-            ExperienceSlider.value = actorStats.Experience / actorStats.ExperienceToNextLevel;
-            for (var i = 0; i < DashImages.Length; i++)
+            this.healthImage.fillAmount = actorStats.Health / actorStats.TotalHealth;
+            manaImage.fillAmount = actorStats.ManaPoints / actorStats.TotalMana;
+            experienceSlider.value = actorStats.Experience / actorStats.ExperienceToNextLevel;
+            for (var i = 0; i < dashImages.Length; i++)
             {
-                DashImages[i].enabled = i < actorStats.DashAmount;
+                dashImages[i].enabled = i < actorStats.DashAmount;
             }
         }
-
-
-
     }
 }

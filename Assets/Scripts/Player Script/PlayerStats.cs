@@ -3,7 +3,7 @@ using CodeGolem.UI;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Assertions;
+using UnityEngine.Serialization;
 using Debug = System.Diagnostics.Debug;
 
 namespace CodeGolem.Actor
@@ -12,13 +12,23 @@ namespace CodeGolem.Actor
     public class PlayerStats : ActorStats
     {
         public delegate void VitalUiUpdater(PlayerStats actor);
+
         public static event VitalUiUpdater VitalUiEvent;
 
         public delegate void StatsUiUpdater(PlayerStats actor);
+
         public static event StatsUiUpdater StatsUiEvent;
 
-        [Header("Player Only Stats")]
-        [SerializeField] protected int dashAmount;
+         [Header("Movement Stats")]
+        public int PlayerMovementSpeed;
+
+        public int PlayerAcceleration;
+
+        [SerializeField] private int dashAmount;
+        public float TimeBetweenDash;
+        [Range(0.1f, 10)] public float DashDistance;
+
+
 
         [Header("Player Skills")]
         [SerializeField] private List<SkillComponent> playerSkills = new List<SkillComponent>();
@@ -165,11 +175,9 @@ namespace CodeGolem.Actor
             }
             catch (ArgumentNullException e)
             {
-                throw new ArgumentNullException("Failed to Register Skill!");  
+                throw new ArgumentNullException("Failed to Register Skill!");
             }
-       
 
-         
             return false;
         }
 

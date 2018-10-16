@@ -1,123 +1,87 @@
 ﻿using CodeGolem.Actor;
-using CodeGolem.Player;
 using System;
 using UnityEngine;
 using UnityEngine.AI;
-using Object = UnityEngine.Object;
 
 namespace CodeGolem.StateController
 {
     public enum MovementType
     {
-        Civilian,
-        Enemy
+        Walk,
+        Dash
     }
 
-    public class MoveState<T> : IState where T : ActorStats
+    public class MoveState : IState
     {
-        private readonly T _actorStats;
+        private readonly PlayerStats player;
+        private readonly NavMeshAgent agent;
+        private readonly Action<MovementReturn> moveCallAction;
 
-        private readonly Transform _actor;
+        private Vector3 destinationVector;
+        private MovementType movement;
+        private float timeElapsed = 0f;
+        private bool dashActive;
 
-        private readonly Action<MovementReturn> _movementCallBack;
+        private bool active;
 
-        private readonly MovementType _movement;
-
-        private readonly Transform[] _idleWaypoints;
-
-        private readonly bool _multipleWaypoints;
-
-        private readonly NavMeshAgent _agent;
-
-        private int _curWaypoint;
-
-        public bool OnAlert;
-
-        public MoveState(Object actorStats, Transform actor, NavMeshAgent agent, Transform[] idleWaypoints, Action<MovementReturn> movementCallBack, MovementType movement)
+        public MoveState(PlayerStats player, NavMeshAgent agent, System.Action<MovementReturn> moveCallAction)
         {
-            _actorStats = actorStats as T;
-            Debug.Assert(_actorStats != null, "ActorStats Missing");
-
-            _actor = actor;
-            _agent = agent;
-            _movementCallBack = movementCallBack;
-            _movement = movement;
-            _idleWaypoints = idleWaypoints;
-
-            if (_idleWaypoints.Length != 0)
-            {
-                _multipleWaypoints = true;
-            }
+            this.player = player;
+            this.agent = agent;
+            this.moveCallAction = moveCallAction;
         }
 
         public void Enter()
         {
-            _agent.isStopped = false;
-            if (!_multipleWaypoints) return;
-            var movementReturn = new MovementReturn(_idleWaypoints[_curWaypoint]);
-            _movementCallBack(movementReturn);
+            agent.isStopped = false;
+        }
+
+        public void SetDestination(Vector3 moveLocation, MovementType type)
+        {
+            destinationVector = moveLocation;
+            movement = type;
+            active = true;
         }
 
         public void Execute()
         {
-            Debug.Log("Move State");
-            if (_movement == MovementType.Enemy)
+            if (dashActive)
             {
-                var stats = _actorStats as EnemyStats;
-                Debug.Assert(stats != null, "Cast to EnemyStats Failed!");
-                if (Vector3.Distance(_actor.transform.position, PlayerController.PlayerLocation.position) < stats.SearchRadius)
-                {
-                    Debug.Log("Move To PLayer");
-                    var movementReturn = new MovementReturn(PlayerController.PlayerLocation);
+                timeElapsed += Time.deltaTime;
+                if (!(timeElapsed >= player.TimeBetweenDash)) return; // Return if time is less than dash time
 
-                    OnAlert = true;
-                    _movementCallBack(movementReturn);
-                    return;
-                }
-                OnAlert = false;
+                timeElapsed = 0;
+                dashActive = false;
             }
 
-            MovementReturn movement = null;
-            if (_multipleWaypoints)
+            if (!active) return; // Return if no Destination set.
+
+            switch (movement)
             {
-                movement = SendNextWaypoint();
-            }
-            else
-            {
-                Debug.Log("Still To PLayer");
-                movement = new MovementReturn(_actor.transform);
+                case MovementType.Walk:
+                    {
+                        moveCallAction(new MovementReturn(destinationVector, movement));
+                        break;
+                    }
+                case MovementType.Dash:
+                    player.DashAmount--;
+                    dashActive = !dashActive;
+                    var dir = destinationVector - agent.transform.position;
+                    var dashPoint = agent.transform.position + (dir * player.DashDistance);
+                    moveCallAction(new MovementReturn(dashPoint, movement));
+
+                    break;
+
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
 
-            _movementCallBack(movement);
-        }
-
-        private MovementReturn SendNextWaypoint()
-        {
-            if (Vector3.Distance(_actor.transform.position, _idleWaypoints[_curWaypoint].position) <
-                _actorStats.ApproachDistance)
-            {
-                _curWaypoint++;
-                _curWaypoint = _curWaypoint >= _idleWaypoints.Length ? 0 : _curWaypoint;
-            }
-
-            var movementReturn = new MovementReturn(_idleWaypoints[_curWaypoint]);
-            return movementReturn;
+            active = false;
         }
 
         public void Exit()
         {
-            _agent.isStopped = true;
-            OnAlert = false;
+            agent.isStopped = true;
         }
-    }
-
-    public class MovementReturn
-    {
-        public MovementReturn(Transform nextTransform)
-        {
-            NextTransform = nextTransform;
-        }
-
-        public Transform NextTransform { get; private set; }
     }
 }

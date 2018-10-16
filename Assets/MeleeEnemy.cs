@@ -1,4 +1,6 @@
 ﻿using CodeGolem.Actor;
+using CodeGolem.Level;
+using UnityEngine.UI;
 
 namespace CodeGolem.Enemy
 {
@@ -15,12 +17,15 @@ namespace CodeGolem.Enemy
     [RequireComponent(typeof(NavMeshAgent))]
     public class MeleeEnemy : ActorBase<EnemyStats>
     {
-        private PlayerController _player;
         private Animator _animator;
         private NavMeshAgent _agent;
 
         [Header("Idle Waypoints")]
         [SerializeField] private Transform[] _idleWaypoints;
+
+        [Header("Enemy UI Canvas")]
+        [SerializeField] private GameObject canvas;
+        [SerializeField] private Image healthImage;
 
         public override void Interact()
         {
@@ -29,7 +34,12 @@ namespace CodeGolem.Enemy
 
         public override void TakeDamage(float damage)
         {
+            if (ActorStats.Health < ActorStats.TotalHealth)
+            {
+                canvas.SetActive(true);
+            }
             this.ActorStats.Health -= damage;
+            healthImage.fillAmount = ActorStats.Health / ActorStats.TotalHealth;
             if (ActorStats.Health <= 0)
             {
                 Destroy(this.gameObject);
@@ -40,19 +50,18 @@ namespace CodeGolem.Enemy
         private void Start()
         {
             //Initialization
-            _player = FindObjectOfType<PlayerController>();
             _animator = GetComponent<Animator>();
             _agent = this.GetComponent<NavMeshAgent>();
 
             Debug.Assert(ActorStats != null, "Enemy Stats is Null!");
-            Debug.Assert(_player != null, "player != null");
             Debug.Assert(_agent != null, "_agent != null");
 
             //Assignment
             _agent.speed = ActorStats.PatrolSpeed;
+            canvas.SetActive(false);
 
             StateMachine = this.gameObject.AddComponent<StateMachine>();
-            StateMachine.ChangeState(new MoveState<EnemyStats>(this.ActorStats, this.transform, _agent, _idleWaypoints, this.MovePlayer, MovementType.Enemy));
+            StateMachine.ChangeState(new AIMoveState<EnemyStats>(this.ActorStats, this.transform, _agent, _idleWaypoints, this.MoveActor, UnitType.Enemy));
         }
 
         // Update is called once per frame
@@ -71,25 +80,23 @@ namespace CodeGolem.Enemy
             _animator.SetBool("Move", false);
         }
 
-        private void MovePlayer(MovementReturn movementReturn)
+        private void MoveActor(MovementReturn movementReturn)
         {
-            var moveState = StateMachine.currentState as MoveState<EnemyStats>;
+            var moveState = StateMachine.currentState as AIMoveState<EnemyStats>;
 
             if (moveState == null || movementReturn == null) return;
 
-            if (transform.position == movementReturn.NextTransform.position) return;
+            if (transform.position == movementReturn.NextPosition) return;
 
             _agent.speed = moveState.OnAlert ? ActorStats.AlertSpeed : ActorStats.PatrolSpeed;
 
-            if (Vector3.Distance(transform.position, _player.transform.position) <=
+            if (Vector3.Distance(transform.position, LevelManager.Player.transform.position) <=
                  ActorStats.ApproachDistance)
             {
                 StateMachine.ChangeState(new AttackState(Attack, AttackAnim, ActorStats.TimeBetweenAttacks));
                 return;
             }
-
-            Debug.Log("Move PLLayer");
-            _agent.SetDestination(movementReturn.NextTransform.position);
+            _agent.SetDestination(movementReturn.NextPosition);
         }
 
         public void AttackAnim()
@@ -100,7 +107,7 @@ namespace CodeGolem.Enemy
         public override void Attack()
         {
             _animator.SetBool("Attack", false);
-            if (Vector3.Distance(transform.position, _player.transform.position) >=
+            if (Vector3.Distance(transform.position, LevelManager.Player.transform.position) >=
                 ActorStats.ApproachDistance)
             {
                 Debug.Log("State Change");
@@ -108,7 +115,7 @@ namespace CodeGolem.Enemy
                 return;
             }
 
-            PlayerController.instance.TakeDamage(ActorStats.BaseDamage);
+            LevelManager.Player.TakeDamage(ActorStats.BaseDamage);
         }
 
         private void OnDrawGizmos()
